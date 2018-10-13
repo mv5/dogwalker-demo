@@ -1,3 +1,11 @@
+This is a demo for a dogwalker app where users can 
+register, 
+submit their details, 
+and see other users details as icons and popups on a map
+
+It uses react, redux, firebase and google maps api
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
