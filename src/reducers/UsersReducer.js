@@ -43,7 +43,8 @@ export default (
     case USERS_FAILURE:
       return {
         ...state,
-        error: action.error
+        error: action.error,
+        isFetching: false
       }
 
     default:

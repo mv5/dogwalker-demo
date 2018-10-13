@@ -3,6 +3,7 @@ import GoogleMapReact from "google-map-react";
 import Icon from "../Icon/Icon";
 import dogPic from "../../assets/dog.png";
 import dogWalkerPic from "../../assets/dogwalker.png";
+import {GridMap} from '../../styles/styles'
 
 const extractUserLocation = (users, currentUser) => {
   const userAddress = users.reduce((location, user) => {
@@ -18,7 +19,7 @@ const extractByType = (type, users) => {
 }
 
 const Map = ({ users, settings, currentUser }) => (
-  <div style={{ height: "50vh", width: "50vw" }}>
+  <GridMap style={{ height: "50vh" }}>
     <GoogleMapReact
       bootstrapURLKeys={{
         key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -34,7 +35,7 @@ const Map = ({ users, settings, currentUser }) => (
         walker.address && <Icon lat={walker.address.lat} lng={walker.address.lng} item={walker} icon={dogWalkerPic} key={walker.id}/>
       ))}
     </GoogleMapReact>
-  </div>
+  </GridMap>
 );
 
 export default Map;

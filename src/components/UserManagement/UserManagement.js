@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { Button } from '../../styles/styles'
+import SignInDialog from '../../components/SignInDialog/SignInDialog'
 
 export default class UserManagement extends Component {
   state = {
@@ -9,18 +11,18 @@ export default class UserManagement extends Component {
   };
 
   // FirebaseUI config.
-uiConfig = {
-  signInFlow: "popup",
-  signInOptions: [
-    // Leave the lines as is for the providers you want to offer your users.
-    this.props.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    this.props.firebase.auth.EmailAuthProvider.PROVIDER_ID
-  ],
-  callbacks: {
-    // Avoid redirects after sign-in.
-    signInSuccessWithAuthResult: () => false
-  }
-};
+  uiConfig = {
+    signInFlow: "popup",
+    signInOptions: [
+      // Leave the lines as is for the providers you want to offer your users.
+      this.props.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      this.props.firebase.auth.EmailAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: () => false
+    }
+  };
 
   componentDidMount() {
     this.unregisterAuthObserver = this.props.firebase.auth().onAuthStateChanged(user => {
@@ -37,8 +39,8 @@ uiConfig = {
       .database()
       .ref("/users/" + user.uid)
       .on("value", snapshot => {
-        const userData = snapshot.val() ? snapshot.val() : undefined
-        this.setState({ isSignedIn: !!user, loaded: true, currentUser: {...user, ...userData} });
+        const userData = snapshot.val() ? snapshot.val() : {}
+        this.setState({ isSignedIn: !!user, loaded: true, currentUser: { ...user, ...userData } });
       })
   }
 
@@ -57,14 +59,22 @@ uiConfig = {
       return (
         <React.Fragment>
           {isSignedIn ? (
-            <div>
-              <button onClick={() => this.signOut()}>Sign Out</button>
+            <div
+              style={{
+                position: "absolute",
+                right: "5vw",
+                top: "5%"
+              }}
+            >
+              <Button variant="contained" onClick={() => this.signOut()}>Sign Out</Button>
             </div>
           ) : (
-              <StyledFirebaseAuth
-                uiConfig={this.uiConfig}
-                firebaseAuth={this.props.firebase.auth()}
-              />
+              <SignInDialog>
+                <StyledFirebaseAuth
+                  uiConfig={this.uiConfig}
+                  firebaseAuth={this.props.firebase.auth()}
+                />
+              </SignInDialog>
             )}
           {this.props.children(this.state)}
         </React.Fragment>

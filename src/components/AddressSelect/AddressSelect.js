@@ -3,6 +3,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
+import { Input, InputLabel, MenuItem, FormControl } from '../../styles/styles'
 
 export default class AddressSelect extends Component {
   state = {
@@ -23,7 +24,7 @@ export default class AddressSelect extends Component {
     this.setState({ addressName });
     geocodeByAddress(addressName)
       .then(results => getLatLng(results[0]))
-      .then(latLng => this.props.onSelect({addressName, ...latLng}))
+      .then(latLng => this.props.onSelect({ addressName, ...latLng }))
       .catch(error => console.error("Error", error));
   };
 
@@ -45,37 +46,39 @@ export default class AddressSelect extends Component {
             getSuggestionItemProps,
             loading
           }) => (
-            <div>
-              <input
-                {...getInputProps({
-                  placeholder: "Search Places ...",
-                  className: "location-search-input"
-                })}
-              />
-              <div className="autocomplete-dropdown-container">
-                {loading && <div>Loading...</div>}
-                {suggestions.map(suggestion => {
-                  const className = suggestion.active
-                    ? "suggestion-item--active"
-                    : "suggestion-item";
-                  // inline style for demonstration purpose
-                  const style = suggestion.active
-                    ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                    : { backgroundColor: "#ffffff", cursor: "pointer" };
-                  return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                        style
-                      })}
-                    >
-                      <span>{suggestion.description}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+              <FormControl>
+                <InputLabel htmlFor="address">Address</InputLabel>
+                <Input
+                  {...getInputProps({
+                    placeholder: "Search Places ...",
+                    className: "location-search-input",
+                    id: 'address'
+                  })}
+                />
+                <div className="autocomplete-dropdown-container">
+                  {loading && <div>Loading...</div>}
+                  {suggestions.map(suggestion => {
+                    const className = suggestion.active
+                      ? "suggestion-item--active"
+                      : "suggestion-item";
+                    // inline style for demonstration purpose
+                    const style = suggestion.active
+                      ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                      : { backgroundColor: "#ffffff", cursor: "pointer" };
+                    return (
+                      <MenuItem
+                        {...getSuggestionItemProps(suggestion, {
+                          className,
+                          style
+                        })}
+                      >
+                        <span>{suggestion.description}</span>
+                      </MenuItem>
+                    );
+                  })}
+                </div>
+              </FormControl>
+            )}
         </PlacesAutocomplete>
       </div>
     );
