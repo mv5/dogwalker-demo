@@ -1,0 +1,8 @@
+export const REQUEST_USERS = "REQUEST_USERS"
+export const UPDATE_USER = "UPDATE_USER"
+export const RECEIVE_USERS = "RECEIVE_USERS"
+export const RECEIVE_USER = "RECEIVE_USER"
+export const USERS_FAILURE = 'USERS_FAILURE';
+
+export const CHANGE_MAP_SETTINGS = "CHANGE_MAP_SETTINGS";
+
