@@ -9,8 +9,9 @@ import * as types from '../../constants/UserTypes'
 const extractUserLocation = (users, currentUser) => {
   const userAddress = users.reduce((location, user) => {
     if (currentUser.uid === user.id) {
-      return user.address
+      location = user.address
     }
+    return location
   }, {})
   return !!userAddress ? {lat: userAddress.lat, lng: userAddress.lng} : undefined
 }
