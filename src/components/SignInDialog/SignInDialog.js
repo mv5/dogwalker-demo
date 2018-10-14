@@ -10,7 +10,7 @@ const SignInDialog = ({children}) => (
         >
             <DialogTitle>Welcome to this demo for dog owners and walkers</DialogTitle>
             <DialogContent>
-                <DialogContentText>please sign in first</DialogContentText>
+                <DialogContentText color="default">please sign in first</DialogContentText>
                 {children}
             </DialogContent>
         </Dialog>

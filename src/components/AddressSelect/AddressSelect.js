@@ -7,7 +7,7 @@ import { Input, InputLabel, MenuItem, FormControl } from '../../styles/styles'
 
 export default class AddressSelect extends Component {
   state = {
-    addressName: "",
+    addressName: this.props.address ? this.props.address.addressName : "",
     searchOptions: {
       type: "address",
       componentRestrictions: {
@@ -32,7 +32,11 @@ export default class AddressSelect extends Component {
     const { searchOptions } = this.state;
 
     return (
-      <div>
+      <div
+        style={{
+          flex: "0 0 40%"
+        }}
+      >
         <PlacesAutocomplete
           value={this.state.addressName}
           onChange={this.handleChange}
@@ -46,21 +50,22 @@ export default class AddressSelect extends Component {
             getSuggestionItemProps,
             loading
           }) => (
-              <FormControl>
+              <FormControl
+                style={{
+                  width: "100%"
+                }}
+              >
                 <InputLabel htmlFor="address">Address</InputLabel>
                 <Input
                   {...getInputProps({
-                    placeholder: "Search Places ...",
-                    className: "location-search-input",
+                    placeholder: "Search Address ...",
                     id: 'address'
                   })}
                 />
                 <div className="autocomplete-dropdown-container">
                   {loading && <div>Loading...</div>}
                   {suggestions.map(suggestion => {
-                    const className = suggestion.active
-                      ? "suggestion-item--active"
-                      : "suggestion-item";
+                 
                     // inline style for demonstration purpose
                     const style = suggestion.active
                       ? { backgroundColor: "#fafafa", cursor: "pointer" }
@@ -68,7 +73,6 @@ export default class AddressSelect extends Component {
                     return (
                       <MenuItem
                         {...getSuggestionItemProps(suggestion, {
-                          className,
                           style
                         })}
                       >

@@ -63,10 +63,11 @@ export default class UserManagement extends Component {
               style={{
                 position: "absolute",
                 right: "5vw",
-                top: "5%"
+                top: "2vh",
+                zIndex: "9999"
               }}
             >
-              <Button variant="contained" onClick={() => this.signOut()}>Sign Out</Button>
+              <Button variant="contained" color="secondary" onClick={() => this.signOut()}>Sign Out</Button>
             </div>
           ) : (
               <SignInDialog>

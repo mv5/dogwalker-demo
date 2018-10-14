@@ -1,12 +1,25 @@
 import React from "react";
-import {Header} from '../../styles/styles'
+import { Header, Typography } from '../../styles/styles'
 
-const AppHeader = ({ userName, currentUser }) => (
-  <Header>
-    <h1>My App</h1>
-    <p>Welcome {userName}! You are now signed-in!</p>
-    <p>{currentUser.type}</p>
-    <p>{currentUser.address.addressName}</p>
+const AppHeader = ({ currentUser }) => (
+  <Header
+    position="relative"
+    color="primary"
+  >
+    <Typography
+      color="inherit"
+      variant="h3"
+      gutterBottom={true}
+    >
+      Walkie Doggy
+    </Typography>
+
+    <Typography
+      variant="h6"
+      color="inherit"
+    >
+      Welcome {currentUser.name || currentUser.displayName}! 
+    </Typography>
   </Header>
 );
 

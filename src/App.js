@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import firebase from "firebase";
-import { Grid } from './styles/styles'
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { Grid, CssBaseline } from './styles/styles'
 
 import UserManagement from "./components/UserManagement/UserManagement";
 import AppHeader from './components/AppHeader/AppHeader'
 import Map from "./components/Map/Map";
 import UserDetails from "./components/UserDetails/UserDetails"
+import AppFooter from "./components/AppFooter/AppFooter"
 
 // Initialize Firebase
 const config = {
@@ -18,8 +21,31 @@ const config = {
 };
 firebase.initializeApp(config);
 
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: "#2196f3" },
+    secondary: { main: '#1de9b6' },
+  },
+  typography: {
+    fontFamily: [
+      'Roboto'
+    ]
+  }
+});
 
 export default class App extends Component {
+  state = {
+    showDetails: false,
+    hoveredUser: {}
+  }
+
+  handleShowDetails = (item = {}) => {
+    this.setState(prevState => ({
+      showDetails: !prevState.showDetails,
+      hoveredUser: item
+    }))
+  }
+
   componentDidMount() {
     this.props.actions.fetchUsers(firebase)
   }
@@ -30,21 +56,29 @@ export default class App extends Component {
 
   render() {
     const { usersData, mapSettings, actions } = this.props
+    const { showDetails, hoveredUser } = this.state
 
     return (
-
-      <UserManagement firebase={firebase}>
-        {({ isSignedIn, currentUser }) => {
-          return isSignedIn && (
-            <Grid>
-              <AppHeader userName={currentUser.displayName} currentUser={currentUser} />
-              <Map users={this.objectToArray(usersData.users)} settings={mapSettings} currentUser={currentUser} />
-              <UserDetails actions={actions} firebase={firebase} currentUser={currentUser} />
-            </Grid>
-          );
-        }}
-      </UserManagement>
-
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <UserManagement firebase={firebase}>
+          {({ isSignedIn, currentUser }) => {
+            return isSignedIn && (
+              <Grid>
+                <AppHeader currentUser={currentUser} />
+                <Map
+                  users={this.objectToArray(usersData.users)}
+                  settings={mapSettings}
+                  currentUser={currentUser}
+                  onHover={item => this.handleShowDetails(item)}
+                />
+                <UserDetails actions={actions} firebase={firebase} currentUser={currentUser} />
+                <AppFooter showDetails={showDetails} hoveredUser={hoveredUser}/>
+              </Grid>
+            );
+          }}
+        </UserManagement>
+      </MuiThemeProvider>
     )
   }
 }
