@@ -8,19 +8,26 @@ import {
 } from '../../styles/styles'
 
 export default class UserDetails extends Component {
-    state = {
-        user: {
-            type: !!this.props.currentUser && this.props.currentUser.type ? this.props.currentUser.type : '',
-            address: !!this.props.currentUser && this.props.currentUser.address
-                ? this.props.currentUser.address : {},
-            phone: !!this.props.currentUser && this.props.currentUser.phone ? this.props.currentUser.phone : '',
-            name: !!this.props.currentUser && this.props.currentUser.name ? this.props.currentUser.name
-                : this.props.currentUser.displayName ? this.props.currentUser.displayName : '',
-            about: !!this.props.currentUser && this.props.currentUser.about ? this.props.currentUser.about : '',
-        },
-        showSnackbar: false,
-        message: "Signed In"
+    constructor(props){
+        super(props)
+        const {currentUser} = props
+        this.state = {
+            user: {
+                type: !!currentUser && currentUser.type ? currentUser.type : '',
+                address: !!currentUser && currentUser.address ? currentUser.address : {},
+                phone: !!currentUser && currentUser.phone ? currentUser.phone : '',
+                name: !!currentUser && currentUser.name ? currentUser.name
+                    : currentUser.displayName ? currentUser.displayName : '',
+                about: !!currentUser && currentUser.about ? currentUser.about : '',
+            },
+            showSnackbar: false,
+            message: "Signed In"
+        }
+        this.timeOut = null
     }
+    
+
+    
 
     componentDidUpdate(prevProps, prevState) {
         if (JSON.stringify(prevState.user) !== JSON.stringify(this.state.user)) {
@@ -28,18 +35,26 @@ export default class UserDetails extends Component {
         }
 
         if (prevProps.isFetching && !this.props.isFetching) {
-            this.setState({
-                showSnackbar: true
-            })
+            if(!this.timeOut){
+                this.setState({
+                    showSnackbar: true
+                })
+            }
         } else if (!this.props.isFetching && this.state.showSnackbar) {
-            setTimeout(() => {
+            if(this.timeOut){
+                clearTimeout(this.timeOut)
+            }
+            this.timeOut = setTimeout(() => {
                 this.setState({
                     showSnackbar: false,
                     message: "Details updated successfully!"
                 })
+                this.timeOut = null
             }, 3000)
         }
     }
+
+ 
 
     handleInputChange(e) {
         const key = e.target.name
