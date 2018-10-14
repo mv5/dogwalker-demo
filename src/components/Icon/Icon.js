@@ -18,7 +18,7 @@ const iconSize = type => {
   }
 }
 
-const IconLayer = ({ item, icon, onHover }) => (
+const IconLayer = ({ item, icon, onHover, onHoverOut }) => (
   <Tooltip
     placement="top"
     title={tooltipText(item)}
@@ -29,7 +29,7 @@ const IconLayer = ({ item, icon, onHover }) => (
       style={iconSize(item.type)}
       key={item}
       onMouseEnter={() => onHover(item)}
-      onMouseLeave={() => onHover()}
+      onMouseLeave={() => onHoverOut()}
     >
       <img src={icon} style={{ width: "100%", height: "100%" }} alt="" />
     </div>
