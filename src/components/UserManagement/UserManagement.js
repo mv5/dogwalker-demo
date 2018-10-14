@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { Button } from '../../styles/styles'
 import SignInDialog from '../../components/SignInDialog/SignInDialog'
+import Loader  from '../../components/Loader/Loader'
 
 export default class UserManagement extends Component {
   state = {
@@ -81,7 +82,7 @@ export default class UserManagement extends Component {
         </React.Fragment>
       );
     } else {
-      return <p>loading...</p>;
+      return <Loader />
     }
   }
 }

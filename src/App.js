@@ -60,7 +60,7 @@ export default class App extends Component {
     })
   }
 
-  handleShowSelect(value){
+  handleShowSelect(value) {
     this.setState({
       show: value
     })
@@ -73,7 +73,6 @@ export default class App extends Component {
     return (
       <React.Fragment>
         <CssBaseline />
-
         <MuiThemeProvider theme={theme}>
           <UserManagement firebase={firebase}>
             {({ isSignedIn, currentUser }) => {
@@ -89,8 +88,16 @@ export default class App extends Component {
                     onSelect={(value) => this.handleShowSelect(value)}
                     show={show}
                   />
-                  <UserDetails actions={actions} firebase={firebase} currentUser={currentUser} />
-                  <AppFooter showDetails={showDetails} hoveredUser={hoveredUser} />
+                  <UserDetails
+                    actions={actions}
+                    firebase={firebase}
+                    currentUser={currentUser}
+                    isFetching={usersData.isFetching}
+                  />
+                  <AppFooter
+                    showDetails={showDetails}
+                    hoveredUser={hoveredUser}
+                  />
                 </Grid>
               );
             }}
