@@ -1,5 +1,5 @@
 ## Walkie Doggy
-TL;DR
+# TL;DR
 A dogwalker app where users can 
 register, 
 submit their details, 
