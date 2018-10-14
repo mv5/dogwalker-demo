@@ -3,23 +3,41 @@ import AddressSelect from "../AddressSelect/AddressSelect";
 import * as userTypes from '../../constants/UserTypes'
 import {
     GridUser, FormWrapper,
-    Select, Input, InputLabel, MenuItem, FormControl, CardContent
+    Select, Input, InputLabel, MenuItem, FormControl, CardContent,
+    Snackbar
 } from '../../styles/styles'
 
 export default class UserDetails extends Component {
     state = {
-        type: !!this.props.currentUser && this.props.currentUser.type ? this.props.currentUser.type : '',
-        address: !!this.props.currentUser && this.props.currentUser.address
-            ? this.props.currentUser.address : {},
-        phone: !!this.props.currentUser && this.props.currentUser.phone ? this.props.currentUser.phone : '',
-        name: !!this.props.currentUser && this.props.currentUser.name ? this.props.currentUser.name
-            : this.props.currentUser.displayName ? this.props.currentUser.displayName : '',
-        about: !!this.props.currentUser && this.props.currentUser.about ? this.props.currentUser.about : '',
+        user: {
+            type: !!this.props.currentUser && this.props.currentUser.type ? this.props.currentUser.type : '',
+            address: !!this.props.currentUser && this.props.currentUser.address
+                ? this.props.currentUser.address : {},
+            phone: !!this.props.currentUser && this.props.currentUser.phone ? this.props.currentUser.phone : '',
+            name: !!this.props.currentUser && this.props.currentUser.name ? this.props.currentUser.name
+                : this.props.currentUser.displayName ? this.props.currentUser.displayName : '',
+            about: !!this.props.currentUser && this.props.currentUser.about ? this.props.currentUser.about : '',
+        },
+        showSnackbar: false,
+        message: "Signed In"
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (JSON.stringify(prevState) !== JSON.stringify(this.state)) {
-            this.props.actions.updateUser(this.state, this.props.currentUser.uid, this.props.firebase)
+        if (JSON.stringify(prevState.user) !== JSON.stringify(this.state.user)) {
+            this.props.actions.updateUser(this.state.user, this.props.currentUser.uid, this.props.firebase)
+        }
+
+        if (prevProps.isFetching && !this.props.isFetching) {
+            this.setState({
+                showSnackbar: true
+            })
+        } else if (!this.props.isFetching && this.state.showSnackbar) {
+            setTimeout(() => {
+                this.setState({
+                    showSnackbar: false,
+                    message: "Details updated successfully!"
+                })
+            }, 3000)
         }
     }
 
@@ -27,19 +45,25 @@ export default class UserDetails extends Component {
         const key = e.target.name
         const value = e.target.value
 
-        this.setState({
-            [key]: value
-        })
+        this.setState(prevState => ({
+            user: {
+                ...prevState.user,
+                [key]: value
+            }
+        }))
     }
 
     handleAddressChange(address) {
-        this.setState({
-            address
-        })
+        this.setState(prevState => ({
+            user: {
+                ...prevState.user,
+                address
+            }
+        }))
     }
 
     render() {
-        const { type, address, phone, name, about } = this.state
+        const { user, showSnackbar, message } = this.state
 
         return (
             <GridUser>
@@ -50,7 +74,7 @@ export default class UserDetails extends Component {
                     }}
                 >
                     <AddressSelect
-                        address={address}
+                        address={user.address}
                         onSelect={address => this.handleAddressChange(address)}
 
                     />
@@ -62,7 +86,7 @@ export default class UserDetails extends Component {
                         >
                             <InputLabel htmlFor="type">Choose Type</InputLabel>
                             <Select
-                                value={type}
+                                value={user.type}
                                 onChange={e => this.handleInputChange(e)}
                                 inputProps={{
                                     id: 'type',
@@ -79,7 +103,7 @@ export default class UserDetails extends Component {
                                 )}
                             </Select>
                         </FormControl>
-                        {type === "walker" &&
+                        {user.type === "walker" &&
                             <React.Fragment>
                                 <FormControl
                                     style={{
@@ -93,7 +117,7 @@ export default class UserDetails extends Component {
                                             id: 'phone',
                                             name: 'phone'
                                         }}
-                                        value={phone}
+                                        value={user.phone}
                                         onChange={e => this.handleInputChange(e)}
 
                                     />
@@ -111,7 +135,7 @@ export default class UserDetails extends Component {
                                             id: 'name',
                                             name: 'name'
                                         }}
-                                        value={name}
+                                        value={user.name}
                                         onChange={e => this.handleInputChange(e)}
 
                                     />
@@ -126,7 +150,7 @@ export default class UserDetails extends Component {
                                             id: 'about',
                                             name: 'about'
                                         }}
-                                        value={about}
+                                        value={user.about}
                                         onChange={e => this.handleInputChange(e)}
 
                                     />
@@ -134,6 +158,15 @@ export default class UserDetails extends Component {
                             </React.Fragment>
                         }
                     </FormWrapper>
+
+                    <Snackbar
+                        open={showSnackbar}
+                        message={<span>{message}</span>}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                    />
                 </CardContent>
             </GridUser>
         )

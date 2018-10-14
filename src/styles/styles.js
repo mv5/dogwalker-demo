@@ -6,14 +6,14 @@ import {
     AppBar, Card, Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
     CardContent, Typography, Tooltip, CssBaseline,
-    FormControlLabel, FormLabel, Checkbox, FormGroup
+    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar
 } from '@material-ui/core'
 
 export {
     Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
     CardContent, Typography, Tooltip, CssBaseline,
-    FormControlLabel, FormLabel, Checkbox, FormGroup
+    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar
 }
 
 export const Grid = styled.div`
