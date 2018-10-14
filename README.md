@@ -1,9 +1,17 @@
-This is a demo for a dogwalker app where users can 
+## Walkie Doggy
+TL;DR
+A dogwalker app where users can 
 register, 
 submit their details, 
-and see other users details as icons and popups on a map
+and see other users details
 
-It uses react, redux, firebase and google maps api
+check out the [Demo](https://dog-walker-map-1539001346416.firebaseapp.com/)
+
+
+This app uses React and Material-ui for the, well, UI
+Data is synced between Firebase and Redux store with asynchronus actions using redux-thunk
+Authorization and Hosting are done through Firebase as well
+
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
