@@ -8,9 +8,9 @@ and see other users details
 check out the [Demo](https://dog-walker-map-1539001346416.firebaseapp.com/)
 
 
-This app uses React and Material-ui for the, well, UI
-Data is synced between Firebase and Redux store with asynchronus actions using redux-thunk
-Authorization and Hosting are done through Firebase as well
+This app uses React and Material-ui for the, well, UI.
+Data is synced between Firebase and Redux store with asynchronus actions using redux-thunk.
+Authorization and Hosting are done through Firebase as well.
 
 
 
