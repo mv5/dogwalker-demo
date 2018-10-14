@@ -13,11 +13,19 @@ const extractUserLocation = (users, currentUser) => {
     }
     return location
   }, {})
-  return !!userAddress ? {lat: userAddress.lat, lng: userAddress.lng} : undefined
+  return !isEmpty(userAddress) ? {lat: userAddress.lat, lng: userAddress.lng} : undefined
 }
 
 const extractByType = (type, users) => {
   return users.filter(user => user.type === type)
+}
+
+const isEmpty = (obj) => {
+  for(var key in obj) {
+      if(obj.hasOwnProperty(key))
+          return false;
+  }
+  return true;
 }
 
 const Map = ({ users, settings, currentUser, onHover }) => (
