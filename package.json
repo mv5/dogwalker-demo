@@ -43,6 +43,7 @@
     "react-firebaseui": "^3.1.2",
     "react-places-autocomplete": "^7.2.0",
     "react-redux": "^5.0.7",
+    "react-spinners": "^0.4.5",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "resolve": "1.6.0",
@@ -102,7 +103,8 @@
       "react-app"
     ],
     "plugins": [
-      "babel-plugin-styled-components"
+      "babel-plugin-styled-components",
+      "emotion"
     ]
   },
   "eslintConfig": {
