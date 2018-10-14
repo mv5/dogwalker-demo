@@ -40,7 +40,14 @@ export const Grid = styled.div`
         " . footer";
     grid-gap: 25px 40px;
     padding: 2vh 5vw;
-
+    @media (max-width: 980px){
+        grid-template-areas: 
+        "header header"
+        "user-details user-details"
+        "map footer";
+        grid-gap: 15px 20px;
+        padding: 2vh 2vw;
+    }
 `
 
 export const Header = styled(AppBar)`
