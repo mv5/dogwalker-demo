@@ -1,2 +1,2 @@
-export const DOG = 'dog'
+export const OWNER = 'owner'
 export const WALKER = 'walker'

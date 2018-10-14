@@ -21,3 +21,8 @@ yarn-debug.log*
 yarn-error.log*
 .env
 src/todo.txt
+.firebaserc
+database.rules.json
+firebase.json
+storage.rules
+.firebase/hosting.YnVpbGQ.cache
