@@ -38,7 +38,8 @@ const theme = createMuiTheme({
 export default class App extends Component {
   state = {
     showDetails: false,
-    hoveredUser: {}
+    hoveredUser: {},
+    show: "all"
   }
 
   componentDidMount() {
@@ -59,9 +60,15 @@ export default class App extends Component {
     })
   }
 
+  handleShowSelect(value){
+    this.setState({
+      show: value
+    })
+  }
+
   render() {
     const { usersData, mapSettings, actions } = this.props
-    const { showDetails, hoveredUser } = this.state
+    const { showDetails, hoveredUser, show } = this.state
 
     return (
       <React.Fragment>
@@ -79,6 +86,8 @@ export default class App extends Component {
                     currentUser={currentUser}
                     onHover={item => this.handleShowDetails(item)}
                     onHoverOut={() => this.handleHideDetails()}
+                    onSelect={(value) => this.handleShowSelect(value)}
+                    show={show}
                   />
                   <UserDetails actions={actions} firebase={firebase} currentUser={currentUser} />
                   <AppFooter showDetails={showDetails} hoveredUser={hoveredUser} />
