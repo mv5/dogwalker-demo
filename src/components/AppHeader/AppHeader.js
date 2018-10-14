@@ -8,14 +8,14 @@ const AppHeader = ({ currentUser }) => (
   >
     <Typography
       color="inherit"
-      variant="h3"
+      variant="headline"
       gutterBottom={true}
     >
-      Walkie Doggy
+      WALKIE DOGGY
     </Typography>
 
     <Typography
-      variant="h6"
+      variant="title"
       color="inherit"
     >
       Welcome {currentUser.name || currentUser.displayName}! 

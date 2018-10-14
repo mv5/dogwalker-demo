@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import firebase from "firebase";
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { Grid, CssBaseline } from './styles/styles'
+import { Grid, CssBaseline, Transition, defaultStyle, transitionStyles } from './styles/styles'
 
 import UserManagement from "./components/UserManagement/UserManagement";
 import AppHeader from './components/AppHeader/AppHeader'
@@ -25,8 +25,8 @@ firebase.initializeApp(config);
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: "#2196f3" },
-    secondary: { main: '#1de9b6' },
+    primary: { main: "#28536B" },
+    secondary: { main: '#35393C' },
   },
   typography: {
     fontFamily: [
@@ -77,28 +77,43 @@ export default class App extends Component {
           <UserManagement firebase={firebase}>
             {({ isSignedIn, currentUser }) => {
               return isSignedIn && (
-                <Grid>
-                  <AppHeader currentUser={currentUser} />
-                  <Map
-                    users={objectToArray(usersData.users)}
-                    settings={mapSettings}
-                    currentUser={currentUser}
-                    onHover={item => this.handleShowDetails(item)}
-                    onHoverOut={() => this.handleHideDetails()}
-                    onSelect={(value) => this.handleShowSelect(value)}
-                    show={show}
-                  />
-                  <UserDetails
-                    actions={actions}
-                    firebase={firebase}
-                    currentUser={currentUser}
-                    isFetching={usersData.isFetching}
-                  />
-                  <AppFooter
-                    showDetails={showDetails}
-                    hoveredUser={hoveredUser}
-                  />
-                </Grid>
+                <Transition
+                  in={isSignedIn}
+                  timeout={300}
+                  mountOnEnter
+                  unmountOnExit
+                  appear={true}
+                >
+                 {(state) => (
+                  <Grid
+                    style={{
+                      ...defaultStyle, 
+                      ...transitionStyles[state]
+                    }}
+                  >
+                    <AppHeader currentUser={currentUser} />
+                    <Map
+                      users={objectToArray(usersData.users)}
+                      settings={mapSettings}
+                      currentUser={currentUser}
+                      onHover={item => this.handleShowDetails(item)}
+                      onHoverOut={() => this.handleHideDetails()}
+                      onSelect={(value) => this.handleShowSelect(value)}
+                      show={show}
+                    />
+                    <UserDetails
+                      actions={actions}
+                      firebase={firebase}
+                      currentUser={currentUser}
+                      isFetching={usersData.isFetching}
+                    />
+                    <AppFooter
+                      showDetails={showDetails}
+                      hoveredUser={hoveredUser}
+                    />
+                  </Grid>
+                 )}
+                </Transition>
               );
             }}
           </UserManagement>

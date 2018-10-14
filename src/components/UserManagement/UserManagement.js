@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { Button } from '../../styles/styles'
+import { Button, Transition } from '../../styles/styles'
 import SignInDialog from '../../components/SignInDialog/SignInDialog'
-import Loader  from '../../components/Loader/Loader'
+import Loader from '../../components/Loader/Loader'
 
 export default class UserManagement extends Component {
   state = {
@@ -71,12 +71,24 @@ export default class UserManagement extends Component {
               <Button variant="contained" color="secondary" onClick={() => this.signOut()}>Sign Out</Button>
             </div>
           ) : (
-              <SignInDialog>
-                <StyledFirebaseAuth
-                  uiConfig={this.uiConfig}
-                  firebaseAuth={this.props.firebase.auth()}
-                />
-              </SignInDialog>
+              <Transition
+                in={!isSignedIn}
+                timeout={300}
+                mountOnEnter
+                unmountOnExit
+                appear={true}
+              >
+                {(state) => (
+                  <SignInDialog
+                    transitionState={state}
+                  >
+                    <StyledFirebaseAuth
+                      uiConfig={this.uiConfig}
+                      firebaseAuth={this.props.firebase.auth()}
+                    />
+                  </SignInDialog>
+                )}
+              </Transition>
             )}
           {this.props.children(this.state)}
         </React.Fragment>

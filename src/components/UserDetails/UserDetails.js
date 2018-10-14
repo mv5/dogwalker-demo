@@ -4,13 +4,13 @@ import * as userTypes from '../../constants/UserTypes'
 import {
     GridUser, FormWrapper,
     Select, Input, InputLabel, MenuItem, FormControl, CardContent,
-    Snackbar
+    Snackbar, Typography
 } from '../../styles/styles'
 
 export default class UserDetails extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        const {currentUser} = props
+        const { currentUser } = props
         this.state = {
             user: {
                 type: !!currentUser && currentUser.type ? currentUser.type : '',
@@ -21,40 +21,45 @@ export default class UserDetails extends Component {
                 about: !!currentUser && currentUser.about ? currentUser.about : '',
             },
             showSnackbar: false,
-            message: "Signed In"
+            message: "Signed In successfully!"
         }
-        this.timeOut = null
+        this.snackbarTimeOut = null
+        this.httpTimeout = null
     }
-    
 
-    
+
+
 
     componentDidUpdate(prevProps, prevState) {
         if (JSON.stringify(prevState.user) !== JSON.stringify(this.state.user)) {
-            this.props.actions.updateUser(this.state.user, this.props.currentUser.uid, this.props.firebase)
+            if (this.httpTimeout) {
+                clearTimeout(this.httpTimeout)
+            }
+            this.httpTimeout = setTimeout(() => {
+                this.props.actions.updateUser(this.state.user, this.props.currentUser.uid, this.props.firebase)
+            }, 1000)
         }
 
         if (prevProps.isFetching && !this.props.isFetching) {
-            if(!this.timeOut){
+            if (!this.snackbarTimeOut) {
                 this.setState({
                     showSnackbar: true
                 })
             }
         } else if (!this.props.isFetching && this.state.showSnackbar) {
-            if(this.timeOut){
-                clearTimeout(this.timeOut)
+            if (this.snackbarTimeOut) {
+                clearTimeout(this.snackbarTimeOut)
             }
-            this.timeOut = setTimeout(() => {
+            this.snackbarTimeOut = setTimeout(() => {
                 this.setState({
                     showSnackbar: false,
                     message: "Details updated successfully!"
                 })
-                this.timeOut = null
             }, 3000)
         }
     }
 
- 
+
 
     handleInputChange(e) {
         const key = e.target.name
@@ -82,6 +87,15 @@ export default class UserDetails extends Component {
 
         return (
             <GridUser>
+                <Typography
+                    variant="title"
+                    color="primary"
+                    style={{
+                        margin: "2% 0 0 2%"
+                    }}
+                >
+                    ENTER YOUR DETAILS
+                </Typography>
                 <CardContent
                     style={{
                         display: "flex",

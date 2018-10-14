@@ -6,15 +6,31 @@ import {
     AppBar, Card, Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
     CardContent, Typography, Tooltip, CssBaseline,
-    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar
+    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar,
+    Paper 
 } from '@material-ui/core'
+
+import Transition from 'react-transition-group/Transition';
 
 export {
     Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
     CardContent, Typography, Tooltip, CssBaseline,
-    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar
+    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar,
+    Transition
 }
+
+export const defaultStyle = {
+    transition: `opacity 1000ms ease-in-out`,
+    opacity: 0,
+  }
+  
+export const transitionStyles = {
+    entering: { opacity: 0 },
+    entered:  { opacity: 1 },
+    exiting: { opacity: 1 },
+    exited:  { opacity: 0 },
+};
 
 export const Grid = styled.div`
     display: grid;
@@ -40,6 +56,7 @@ export const Header = styled(AppBar)`
     grid-area: header;
     border-top-right-radius: 5px;
     padding: 1vh 1vw;
+    text-align: center;
 `
 
 export const GridMap = styled.div`
@@ -65,6 +82,8 @@ export const FormWrapper = styled.div`
     flex-direction: column;
     flex: 0 0 30%;
 `
-export const Footer = styled.footer`
+export const Footer = styled(Paper)`
     grid-area: footer;
+    min-height: 5vh;
+    padding: 2% 5%;
 `
