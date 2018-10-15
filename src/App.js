@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import firebase from "firebase";
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { Grid, CssBaseline, Transition, defaultStyle, transitionStyles } from './styles/styles'
+import { Grid, CssBaseline, Transition, beforeTransitionStyle, transitionStyles } from './styles/styles'
 
 import UserManagement from "./components/UserManagement/UserManagement";
 import AppHeader from './components/AppHeader/AppHeader'
@@ -87,7 +87,7 @@ export default class App extends Component {
                  {(state) => (
                   <Grid
                     style={{
-                      ...defaultStyle, 
+                      ...beforeTransitionStyle, 
                       ...transitionStyles[state]
                     }}
                   >

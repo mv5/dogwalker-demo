@@ -10,7 +10,7 @@ const AppFooter = ({ showDetails, hoveredUser }) => (
                 <Typography variant="subtitle2" color="secondary">{hoveredUser.phone || ""}</Typography>
             </div>
             :
-            <Typography variant="subheading" color="secondary">*Hover over a Walker to see his/her deails</Typography>
+            <Typography variant="subheading" color="secondary">*Hover over a Walker to see his/her details</Typography>
         }
     </Footer>
 )

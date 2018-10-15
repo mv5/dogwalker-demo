@@ -1,7 +1,7 @@
 import React from 'react'
 import { 
     PopupBG, Dialog, DialogContent, DialogContentText, DialogTitle,
-    defaultStyle, transitionStyles
+    beforeTransitionStyle, transitionStyles
 } from '../../styles/styles'
 
 
@@ -12,7 +12,7 @@ const SignInDialog = ({children, transitionState}) => (
             open={true}
             style={{ 
                 textAlign: 'center',
-                ...defaultStyle,
+                ...beforeTransitionStyle,
                 ...transitionStyles[transitionState]
             }}
         >

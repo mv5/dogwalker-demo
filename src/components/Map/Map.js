@@ -38,14 +38,14 @@ const renderByType = (type, users, onHover, onHoverOut) => {
 
 const Map = ({ users, settings, currentUser, onHover, onHoverOut, onSelect, show }) => (
   <GridMap>
-    <FormControl 
-    component="fieldset"
-    style={{
-       position: "absolute",
-       zIndex: "9999",
-       top: "5%",
-       left: "5%",
-    }}
+    <FormControl
+      component="fieldset"
+      style={{
+        position: "absolute",
+        zIndex: "9999",
+        top: "5%",
+        left: "5%",
+      }}
     >
       <FormLabel component="legend">Show</FormLabel>
       <FormGroup>

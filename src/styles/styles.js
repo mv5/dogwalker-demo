@@ -6,8 +6,7 @@ import {
     AppBar, Card, Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
     CardContent, Typography, Tooltip, CssBaseline,
-    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar,
-    Paper 
+    FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar 
 } from '@material-ui/core'
 
 import Transition from 'react-transition-group/Transition';
@@ -15,12 +14,12 @@ import Transition from 'react-transition-group/Transition';
 export {
     Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
-    CardContent, Typography, Tooltip, CssBaseline,
+    Typography, Tooltip, CssBaseline,
     FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar,
     Transition
 }
 
-export const defaultStyle = {
+export const beforeTransitionStyle = {
     transition: `opacity 1000ms ease-in-out`,
     opacity: 0,
   }
@@ -43,10 +42,12 @@ export const Grid = styled.div`
     grid-gap: 25px 40px;
     padding: 2vh 5vw;
     @media (max-width: 980px){
+        grid-template-columns: 1fr;
         grid-template-areas: 
-        "header header"
-        "user-details user-details"
-        "map footer";
+        "header"
+        "user-details"
+        "map" 
+        "footer";
         grid-gap: 15px 20px;
         padding: 2vh 2vw;
     }
@@ -56,17 +57,34 @@ export const Header = styled(AppBar)`
     grid-area: header;
     border-top-right-radius: 5px;
     padding: 1vh 1vw;
-    text-align: center;
+`
+export const SignOutContainer = styled.div`
+    position: absolute;
+    right: 5vw;
+    top: 2vh;
+    z-index: 9999;
+    @media (max-width: 980px){
+        right: 2vw;
+    }
 `
 
 export const GridMap = styled.div`
     grid-area: map;
-    height: 50vh;
+    min-height: 50vh;
+    height: 100%;
     position: relative
 `
 
 export const GridUser = styled(Card)`
     grid-area: user-details;
+`
+
+export const CustomCardContent = styled(CardContent)`
+    display: flex;
+    justifyContent: space-around;
+    @media (max-width:980px){
+        flex-direction: column;
+    }
 `
 
 export const PopupBG = styled.div`
@@ -82,8 +100,6 @@ export const FormWrapper = styled.div`
     flex-direction: column;
     flex: 0 0 30%;
 `
-export const Footer = styled(Paper)`
+export const Footer = styled.footer`
     grid-area: footer;
-    min-height: 5vh;
-    padding: 2% 5%;
 `

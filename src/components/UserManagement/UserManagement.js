@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { Button, Transition } from '../../styles/styles'
+import { Button, Transition, SignOutContainer } from '../../styles/styles'
 import SignInDialog from '../../components/SignInDialog/SignInDialog'
 import Loader from '../../components/Loader/Loader'
 
@@ -30,13 +30,13 @@ export default class UserManagement extends Component {
       if (!!user) {
         this.syncUserData(user)
       } else {
-        this.setState({ isSignedIn: !!user, loaded: true });
+        this.setState({ isSignedIn: false, loaded: true });
       }
     });
   }
 
   syncUserData(user) {
-    return this.props.firebase
+    this.props.firebase
       .database()
       .ref("/users/" + user.uid)
       .on("value", snapshot => {
@@ -60,16 +60,9 @@ export default class UserManagement extends Component {
       return (
         <React.Fragment>
           {isSignedIn ? (
-            <div
-              style={{
-                position: "absolute",
-                right: "5vw",
-                top: "2vh",
-                zIndex: "9999"
-              }}
-            >
+            <SignOutContainer>
               <Button variant="contained" color="secondary" onClick={() => this.signOut()}>Sign Out</Button>
-            </div>
+            </SignOutContainer>
           ) : (
               <Transition
                 in={!isSignedIn}

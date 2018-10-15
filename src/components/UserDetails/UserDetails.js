@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import AddressSelect from "../AddressSelect/AddressSelect";
 import * as userTypes from '../../constants/UserTypes'
 import {
-    GridUser, FormWrapper,
-    Select, Input, InputLabel, MenuItem, FormControl, CardContent,
+    GridUser, FormWrapper, CustomCardContent,
+    Select, Input, InputLabel, MenuItem, FormControl, 
     Snackbar, Typography
 } from '../../styles/styles'
 
@@ -13,12 +13,11 @@ export default class UserDetails extends Component {
         const { currentUser } = props
         this.state = {
             user: {
-                type: !!currentUser && currentUser.type ? currentUser.type : '',
-                address: !!currentUser && currentUser.address ? currentUser.address : {},
-                phone: !!currentUser && currentUser.phone ? currentUser.phone : '',
-                name: !!currentUser && currentUser.name ? currentUser.name
-                    : currentUser.displayName ? currentUser.displayName : '',
-                about: !!currentUser && currentUser.about ? currentUser.about : '',
+                type: currentUser.type || '',
+                address: currentUser.address || {},
+                phone: currentUser.phone || '',
+                name: currentUser.name || currentUser.displayName || '',
+                about: currentUser.about || '',
             },
             showSnackbar: false,
             message: "Signed In successfully!"
@@ -27,9 +26,6 @@ export default class UserDetails extends Component {
         this.httpTimeout = null
     }
 
-
-
-
     componentDidUpdate(prevProps, prevState) {
         if (JSON.stringify(prevState.user) !== JSON.stringify(this.state.user)) {
             if (this.httpTimeout) {
@@ -37,6 +33,7 @@ export default class UserDetails extends Component {
             }
             this.httpTimeout = setTimeout(() => {
                 this.props.actions.updateUser(this.state.user, this.props.currentUser.uid, this.props.firebase)
+                this.httpTimeout = null
             }, 1000)
         }
 
@@ -55,11 +52,10 @@ export default class UserDetails extends Component {
                     showSnackbar: false,
                     message: "Details updated successfully!"
                 })
+                this.snackbarTimeOut = null
             }, 3000)
         }
     }
-
-
 
     handleInputChange(e) {
         const key = e.target.name
@@ -94,14 +90,9 @@ export default class UserDetails extends Component {
                         margin: "2% 0 0 2%"
                     }}
                 >
-                    ENTER YOUR DETAILS
+                    YOUR DETAILS HERE
                 </Typography>
-                <CardContent
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-around"
-                    }}
-                >
+                <CustomCardContent >
                     <AddressSelect
                         address={user.address}
                         onSelect={address => this.handleAddressChange(address)}
@@ -196,7 +187,7 @@ export default class UserDetails extends Component {
                             horizontal: 'center',
                         }}
                     />
-                </CardContent>
+                </CustomCardContent>
             </GridUser>
         )
     }
