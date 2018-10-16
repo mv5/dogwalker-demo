@@ -61,7 +61,7 @@ export default class UserManagement extends Component {
         <React.Fragment>
           {isSignedIn ? (
             <SignOutContainer>
-              <Button variant="contained" color="secondary" onClick={() => this.signOut()}>Sign Out</Button>
+              <Button variant="extendedFab" color="secondary" onClick={() => this.signOut()}>Sign Out</Button>
             </SignOutContainer>
           ) : (
               <Transition

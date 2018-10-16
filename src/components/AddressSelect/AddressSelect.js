@@ -34,7 +34,9 @@ export default class AddressSelect extends Component {
     return (
       <div
         style={{
-          flex: "0 0 40%"
+          flex: "0 0 40%",
+          marginBottom: "20px",
+          width: "40%"
         }}
       >
         <PlacesAutocomplete
@@ -62,7 +64,7 @@ export default class AddressSelect extends Component {
                     id: 'address'
                   })}
                 />
-                <div className="autocomplete-dropdown-container">
+                <div className="autocomplete-dropdown-container" style={{width: "100%"}}>
                   {loading && <div>Loading...</div>}
                   {suggestions.map(suggestion => {
                  

@@ -55,7 +55,7 @@ export const Grid = styled.div`
 
 export const Header = styled(AppBar)`
     grid-area: header;
-    border-top-right-radius: 5px;
+    border-top-right-radius: 20px;
     padding: 1vh 1vw;
 `
 export const SignOutContainer = styled.div`

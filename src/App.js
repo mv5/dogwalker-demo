@@ -97,7 +97,7 @@ export default class App extends Component {
                         actions={actions}
                         users={objectToArray(usersData.users)}
                         settings={mapSettings}
-                        currentUser={currentUser}
+                        currentUserId={currentUser.uid}
                         onHover={item => this.handleShowDetails(item)}
                         onHoverOut={() => this.handleHideDetails()}
                         onSelect={(value) => this.handleShowSelect(value)}

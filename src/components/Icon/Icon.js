@@ -13,9 +13,16 @@ const tooltipText = item => (
 )
 
 const iconSize = type => {
-  return {
-    width: type === "walker" ? "2vw" : "1.5vw",
-    height: type === "walker" ? "2vw" : "1.5vw"
+  if(window.screen.width > 980){
+    return {
+      width: type === "walker" ? "2vw" : "1.5vw",
+      height: type === "walker" ? "2vw" : "1.5vw"
+    }
+  }else{
+    return {
+      width: type === "walker" ? "8vw" : "6vw",
+      height: type === "walker" ? "8vw" : "6vw"
+    }
   }
 }
 

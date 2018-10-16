@@ -32,9 +32,9 @@ export default class Map extends Component {
     })
   }
 
-  extractUserLocation(users, currentUser) {
+  extractUserLocation(users, currentUserId) {
     const userAddress = users.reduce((location, user) => {
-      if (currentUser.uid === user.id) {
+      if (currentUserId === user.id) {
         location = user.address
       }
       return location
@@ -43,7 +43,7 @@ export default class Map extends Component {
   }
 
   render() {
-    const { users, settings, currentUser, onSelect, show, onHover, onHoverOut, actions } = this.props
+    const { users, settings, currentUserId, onSelect, show, onHover, onHoverOut, actions } = this.props
     const { clusters } = this.state
 
     return (
@@ -81,7 +81,7 @@ export default class Map extends Component {
             key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
           }}
           defaultCenter={defaultMapSettings.center}
-          center={users.length > 0 ? this.extractUserLocation(users, currentUser) : undefined}
+          center={users.length > 0 ? this.extractUserLocation(users, currentUserId) : undefined}
           defaultZoom={defaultMapSettings.zoom}
           zoom={settings.zoom}
           onChange={({ center, zoom, bounds, marginBounds }) => actions.changeMapSettings({zoom, bounds})}
