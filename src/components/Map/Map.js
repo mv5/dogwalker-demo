@@ -3,6 +3,8 @@ import GoogleMapReact from "google-map-react";
 import Icon from "../Icon/Icon";
 import Cluster from "../Cluster/Cluster"
 import dogPic from "../../assets/dog.png";
+import catPic from '../../assets/cat.png'
+import housePic from '../../assets/house.png'
 import dogWalkerPic from "../../assets/dogwalking.png";
 import { GridMap, FormControlLabel, FormGroup, FormLabel, FormControl, Checkbox } from '../../styles/styles'
 import { isEmpty, objectArraysAreEqual, objectsAreEqual, capitalizeFirstLetter } from '../../utils/utils'
@@ -40,6 +42,21 @@ export default class Map extends Component {
       return location
     }, {})
     return !isEmpty(userAddress) ? { lat: userAddress.lat, lng: userAddress.lng } : undefined
+  }
+
+  setIconByType(item){
+    switch(item.type){
+      case userTypes.WALKER:
+        return dogWalkerPic
+      case userTypes.SITTER:
+        return housePic
+      case userTypes.CAT_OWNER:
+        return catPic
+      case userTypes.DOG_OWNER:
+      default:
+        return dogPic
+    }
+   
   }
 
   render() {
@@ -94,7 +111,7 @@ export default class Map extends Component {
                     lat={lat}
                     lng={lng}
                     item={points[0]}
-                    icon={points[0].type === userTypes.WALKER ? dogWalkerPic : dogPic}
+                    icon={this.setIconByType(points[0])}
                     key={points[0].id}
                     onHover={hoveredItem => onHover(hoveredItem)}
                     onHoverOut={() => onHoverOut()}

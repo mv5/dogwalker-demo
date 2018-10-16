@@ -1,9 +1,10 @@
 import React from 'react'
 import { Tooltip } from '../../styles/styles'
 import { withStyles } from '@material-ui/core/styles';
+import * as userTypes from '../../constants/UserTypes'
 
 const tooltipText = item => (
-  item.type === "walker" ?
+  item.type === userTypes.WALKER || item.type === userTypes.SITTER?
   <div>
     <p>{item.name || item.displayName || ""}</p>
     <p>{(item.address && item.address.addressName) || ""}</p>
@@ -15,13 +16,13 @@ const tooltipText = item => (
 const iconSize = type => {
   if(window.screen.width > 980){
     return {
-      width: type === "walker" ? "2vw" : "1.5vw",
-      height: type === "walker" ? "2vw" : "1.5vw"
+      width: type === userTypes.DOG_OWNER ? "1.5vw" : "2vw",
+      height: type === userTypes.DOG_OWNER ? "1.5vw" : "2vw"
     }
   }else{
     return {
-      width: type === "walker" ? "8vw" : "6vw",
-      height: type === "walker" ? "8vw" : "6vw"
+      width: type === userTypes.DOG_OWNER ? "6vw" : "8vw",
+      height: type === userTypes.DOG_OWNER ? "6vw" : "8vw"
     }
   }
 }

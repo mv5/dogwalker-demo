@@ -6,6 +6,7 @@ import {
     Select, Input, InputLabel, MenuItem, FormControl, 
     Snackbar, Typography
 } from '../../styles/styles'
+import { capitalizeFirstLetter } from '../../utils/utils'
 
 export default class UserDetails extends Component {
     constructor(props) {
@@ -118,12 +119,12 @@ export default class UserDetails extends Component {
                                         value={userTypes[key]}
                                         key={userTypes[key]}
                                     >
-                                        {userTypes[key].toUpperCase()}
+                                        {capitalizeFirstLetter(userTypes[key])}
                                     </MenuItem >
                                 )}
                             </Select>
                         </FormControl>
-                        {user.type === userTypes.WALKER &&
+                        {(user.type === userTypes.WALKER || user.type === userTypes.SITTER) &&
                             <React.Fragment>
                                 <FormControl
                                     style={{
