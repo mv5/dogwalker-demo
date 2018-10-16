@@ -3,23 +3,35 @@ import { Tooltip } from '../../styles/styles'
 import { withStyles } from '@material-ui/core/styles';
 import * as userTypes from '../../constants/UserTypes'
 
-const tooltipText = item => (
-  item.type === userTypes.WALKER || item.type === userTypes.SITTER?
-  <div>
-    <p>{item.name || item.displayName || ""}</p>
-    <p>{(item.address && item.address.addressName) || ""}</p>
-  </div>
-  :
-  <p>nice doggy</p>
-)
+const tooltipText = item => {
+  switch (item.type) {
+    case userTypes.WALKER:
+    case userTypes.SITTER:
+      return (
+        <div>
+          <p>{item.name || item.displayName || ""}</p>
+          <p>{(item.address && item.address.addressName) || ""}</p>
+        </div>
+      )
+    case userTypes.DOG_OWNER:
+      return <p>nice doggy</p>
+    case userTypes.CAT_OWNER:
+      return <p>nice kitty</p>
+    default:
+      return ''
+  }
+}
+
+
+
 
 const iconSize = type => {
-  if(window.screen.width > 980){
+  if (window.screen.width > 980) {
     return {
       width: type === userTypes.DOG_OWNER ? "1.5vw" : "2vw",
       height: type === userTypes.DOG_OWNER ? "1.5vw" : "2vw"
     }
-  }else{
+  } else {
     return {
       width: type === userTypes.DOG_OWNER ? "6vw" : "8vw",
       height: type === userTypes.DOG_OWNER ? "6vw" : "8vw"
