@@ -1,90 +1,117 @@
-import React from "react";
+import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import Icon from "../Icon/Icon";
+import Cluster from "../Cluster/Cluster"
 import dogPic from "../../assets/dog.png";
 import dogWalkerPic from "../../assets/dogwalking.png";
 import { GridMap, FormControlLabel, FormGroup, FormLabel, FormControl, Checkbox } from '../../styles/styles'
-import { OWNER, WALKER } from '../../constants/UserTypes'
-import { isEmpty } from '../../utils/utils'
+import { isEmpty, objectArraysAreEqual, objectsAreEqual, capitalizeFirstLetter } from '../../utils/utils'
+import supercluster from 'points-cluster';
+import { defaultClusterSettings, defaultMapSettings } from '../../constants/MapSettings'
+import * as userTypes from '../../constants/UserTypes'
 
-const extractUserLocation = (users, currentUser) => {
-  const userAddress = users.reduce((location, user) => {
-    if (currentUser.uid === user.id) {
-      location = user.address
+export default class Map extends Component {
+  state = {
+    clusters: []
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!objectArraysAreEqual(this.props.users, prevProps.users) ||
+        !objectsAreEqual(prevProps.settings, this.props.settings)) {
+      this.setClusters(this.props.users, this.props.settings)
     }
-    return location
-  }, {})
-  return !isEmpty(userAddress) ? { lat: userAddress.lat, lng: userAddress.lng } : undefined
-}
+  }
 
-const extractByType = (type, users) => {
-  return users.filter(user => user.type === type)
-}
+  setClusters(users, settings) {
+    const usersWithCoord = users.map(user => ({
+      ...user,
+      ...user.address
+    }))
+    this.setState({
+      clusters: supercluster(usersWithCoord, defaultClusterSettings)(settings)
+    })
+  }
 
-const renderByType = (type, users, onHover, onHoverOut) => {
-  return extractByType(type, users).map(item => (
-    item.address &&
-    <Icon
-      lat={item.address.lat}
-      lng={item.address.lng}
-      item={item}
-      icon={item.type && item.type === "walker" ? dogWalkerPic : dogPic}
-      key={item.id}
-      onHover={hoveredItem => onHover(hoveredItem)}
-      onHoverOut={() => onHoverOut()}
-    />
-  ))
-}
-
-const Map = ({ users, settings, currentUser, onHover, onHoverOut, onSelect, show }) => (
-  <GridMap>
-    <FormControl
-      component="fieldset"
-      style={{
-        position: "absolute",
-        zIndex: "9999",
-        top: "5%",
-        left: "5%",
-      }}
-    >
-      <FormLabel component="legend">Show</FormLabel>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Checkbox checked={show === "all"} onChange={() => onSelect('all')} value="all" />
-          }
-          label="All"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox checked={show === "dogs"} onChange={() => onSelect('dogs')} value="dogs" />
-          }
-          label="Dogs"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox checked={show === "walkers"} onChange={() => onSelect('walkers')} value="walkers" />
-          }
-          label="Walkers"
-        />
-      </FormGroup>
-    </FormControl>
-    <GoogleMapReact
-      bootstrapURLKeys={{
-        key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-      }}
-      defaultCenter={settings.center}
-      center={!!currentUser && users.length > 0 ? extractUserLocation(users, currentUser) : undefined}
-      defaultZoom={settings.zoom}
-    >
-      {(show === "dogs" || show === "all") &&
-        renderByType(OWNER, users, onHover, onHoverOut)
+  extractUserLocation(users, currentUser) {
+    const userAddress = users.reduce((location, user) => {
+      if (currentUser.uid === user.id) {
+        location = user.address
       }
-      {(show === "walkers" || show === "all") &&
-        renderByType(WALKER, users, onHover, onHoverOut)
-      }
-    </GoogleMapReact>
-  </GridMap>
-);
+      return location
+    }, {})
+    return !isEmpty(userAddress) ? { lat: userAddress.lat, lng: userAddress.lng } : undefined
+  }
 
-export default Map;
+  render() {
+    const { users, settings, currentUser, onSelect, show, onHover, onHoverOut, actions } = this.props
+    const { clusters } = this.state
+
+    return (
+      <GridMap>
+        <FormControl
+          component="fieldset"
+          style={{
+            position: "absolute",
+            zIndex: "9999",
+            top: "5%",
+            left: "5%",
+          }}
+        >
+          <FormLabel component="legend">Show</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox checked={show === "all"} onChange={() => onSelect('all')} value="all" />
+              }
+              label="All"
+            />
+            {Object.keys(userTypes).map(key => 
+              <FormControlLabel
+              control={
+                <Checkbox checked={show === userTypes[key]} onChange={() => onSelect(userTypes[key])} value={userTypes[key]} />
+              }
+              label={capitalizeFirstLetter(userTypes[key] + 's')}
+            />
+            )}
+          </FormGroup>
+        </FormControl>
+
+        <GoogleMapReact
+          bootstrapURLKeys={{
+            key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+          }}
+          defaultCenter={defaultMapSettings.center}
+          center={users.length > 0 ? this.extractUserLocation(users, currentUser) : undefined}
+          defaultZoom={defaultMapSettings.zoom}
+          zoom={settings.zoom}
+          onChange={({ center, zoom, bounds, marginBounds }) => actions.changeMapSettings({zoom, bounds})}
+        >
+          {clusters.map(({ y: lat, x: lng, numPoints, points }) => (
+                numPoints === 1
+                  ?
+                  points[0].addressName && (show === points[0].type || show === "all") &&
+                  <Icon
+                    lat={lat}
+                    lng={lng}
+                    item={points[0]}
+                    icon={points[0].type === userTypes.WALKER ? dogWalkerPic : dogPic}
+                    key={points[0].id}
+                    onHover={hoveredItem => onHover(hoveredItem)}
+                    onHoverOut={() => onHoverOut()}
+                  />
+                  :
+                  <Cluster
+                    key={points[0].id}
+                    lat={lat}
+                    lng={lng}
+                  >
+                    {numPoints}
+                  </Cluster>
+              ))
+          }
+        </GoogleMapReact>
+      </GridMap>
+    )
+  }
+}
+

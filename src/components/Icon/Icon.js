@@ -1,5 +1,6 @@
 import React from 'react'
 import { Tooltip } from '../../styles/styles'
+import { withStyles } from '@material-ui/core/styles';
 
 const tooltipText = item => (
   item.type === "walker" ?
@@ -18,8 +19,15 @@ const iconSize = type => {
   }
 }
 
+const CustomTooltip = withStyles({
+  tooltip: {
+    fontSize: "14px"
+  }
+})(Tooltip)
+
+
 const IconLayer = ({ item, icon, onHover, onHoverOut }) => (
-  <Tooltip
+  <CustomTooltip
     placement="top"
     title={tooltipText(item)}
     enterDelay={0}
@@ -33,7 +41,7 @@ const IconLayer = ({ item, icon, onHover, onHoverOut }) => (
     >
       <img src={icon} style={{ width: "100%", height: "100%" }} alt="" />
     </div>
-  </Tooltip>
+  </CustomTooltip>
 )
 
 export default IconLayer

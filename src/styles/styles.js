@@ -5,7 +5,7 @@ import dogsBG from '../assets/dogs-bg.jpg'
 import {
     AppBar, Card, Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
-    CardContent, Typography, Tooltip, CssBaseline,
+    CardContent, Typography, Tooltip, CssBaseline, Avatar,
     FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar 
 } from '@material-ui/core'
 
@@ -14,7 +14,7 @@ import Transition from 'react-transition-group/Transition';
 export {
     Dialog, DialogContent, DialogContentText, DialogTitle,
     Button, Select, Input, InputLabel, MenuItem, FormControl,
-    Typography, Tooltip, CssBaseline,
+    Typography, Tooltip, CssBaseline, Avatar,
     FormControlLabel, FormLabel, Checkbox, FormGroup, Snackbar,
     Transition
 }
@@ -81,7 +81,7 @@ export const GridUser = styled(Card)`
 
 export const CustomCardContent = styled(CardContent)`
     display: flex;
-    justifyContent: space-around;
+    justify-content: space-around;
     @media (max-width:980px){
         flex-direction: column;
     }

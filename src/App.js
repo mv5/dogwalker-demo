@@ -31,7 +31,8 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: [
       'Roboto'
-    ]
+    ],
+    useNextVariants: true
   }
 });
 
@@ -84,35 +85,36 @@ export default class App extends Component {
                   unmountOnExit
                   appear={true}
                 >
-                 {(state) => (
-                  <Grid
-                    style={{
-                      ...beforeTransitionStyle, 
-                      ...transitionStyles[state]
-                    }}
-                  >
-                    <AppHeader currentUser={currentUser} />
-                    <Map
-                      users={objectToArray(usersData.users)}
-                      settings={mapSettings}
-                      currentUser={currentUser}
-                      onHover={item => this.handleShowDetails(item)}
-                      onHoverOut={() => this.handleHideDetails()}
-                      onSelect={(value) => this.handleShowSelect(value)}
-                      show={show}
-                    />
-                    <UserDetails
-                      actions={actions}
-                      firebase={firebase}
-                      currentUser={currentUser}
-                      isFetching={usersData.isFetching}
-                    />
-                    <AppFooter
-                      showDetails={showDetails}
-                      hoveredUser={hoveredUser}
-                    />
-                  </Grid>
-                 )}
+                  {(state) => (
+                    <Grid
+                      style={{
+                        ...beforeTransitionStyle,
+                        ...transitionStyles[state]
+                      }}
+                    >
+                      <AppHeader currentUser={currentUser} />
+                      <Map
+                        actions={actions}
+                        users={objectToArray(usersData.users)}
+                        settings={mapSettings}
+                        currentUser={currentUser}
+                        onHover={item => this.handleShowDetails(item)}
+                        onHoverOut={() => this.handleHideDetails()}
+                        onSelect={(value) => this.handleShowSelect(value)}
+                        show={show}
+                      />
+                      <UserDetails
+                        actions={actions}
+                        firebase={firebase}
+                        currentUser={currentUser}
+                        isFetching={usersData.isFetching}
+                      />
+                      <AppFooter
+                        showDetails={showDetails}
+                        hoveredUser={hoveredUser}
+                      />
+                    </Grid>
+                  )}
                 </Transition>
               );
             }}

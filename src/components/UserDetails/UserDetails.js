@@ -84,7 +84,7 @@ export default class UserDetails extends Component {
         return (
             <GridUser>
                 <Typography
-                    variant="title"
+                    variant="h6"
                     color="primary"
                     style={{
                         margin: "2% 0 0 2%"
@@ -123,7 +123,7 @@ export default class UserDetails extends Component {
                                 )}
                             </Select>
                         </FormControl>
-                        {user.type === "walker" &&
+                        {user.type === userTypes.WALKER &&
                             <React.Fragment>
                                 <FormControl
                                     style={{

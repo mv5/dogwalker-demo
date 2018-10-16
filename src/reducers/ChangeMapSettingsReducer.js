@@ -1,10 +1,13 @@
 import { CHANGE_MAP_SETTINGS } from "../constants/ActionTypes";
-import { mapSettings } from "../constants/MapSettings";
+import { defaultMapSettings } from "../constants/MapSettings";
 
-export default (state = mapSettings, action) => {
+export default (state = defaultMapSettings, action) => {
   switch (action.type) {
     case CHANGE_MAP_SETTINGS:
-      return action.mapSettings;
+      return {
+        ...state,
+        ...action.mapSettings
+      }
     default:
       return state;
   }
