@@ -19,16 +19,18 @@ export default class Map extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (!objectArraysAreEqual(this.props.users, prevProps.users) ||
-        !objectsAreEqual(prevProps.settings, this.props.settings)) {
+      !objectsAreEqual(prevProps.settings, this.props.settings)) {
       this.setClusters(this.props.users, this.props.settings)
     }
   }
 
   setClusters(users, settings) {
-    const usersWithCoord = users.map(user => ({
-      ...user,
-      ...user.address
-    }))
+    const usersWithCoord =
+      users.filter(user => user.address)
+        .map(user => ({
+          ...user,
+          ...user.address
+        }))
     this.setState({
       clusters: supercluster(usersWithCoord, defaultClusterSettings)(settings)
     })
@@ -44,8 +46,8 @@ export default class Map extends Component {
     return !isEmpty(userAddress) ? { lat: userAddress.lat, lng: userAddress.lng } : undefined
   }
 
-  setIconByType(item){
-    switch(item.type){
+  setIconByType(item) {
+    switch (item.type) {
       case userTypes.WALKER:
         return dogWalkerPic
       case userTypes.SITTER:
@@ -56,7 +58,7 @@ export default class Map extends Component {
       default:
         return dogPic
     }
-   
+
   }
 
   render() {
@@ -82,13 +84,13 @@ export default class Map extends Component {
               }
               label="All"
             />
-            {Object.keys(userTypes).map(key => 
+            {Object.keys(userTypes).map(key =>
               <FormControlLabel
-              control={
-                <Checkbox checked={show === userTypes[key]} onChange={() => onSelect(userTypes[key])} value={userTypes[key]} />
-              }
-              label={capitalizeFirstLetter(userTypes[key] + 's')}
-            />
+                control={
+                  <Checkbox checked={show === userTypes[key]} onChange={() => onSelect(userTypes[key])} value={userTypes[key]} />
+                }
+                label={capitalizeFirstLetter(userTypes[key] + 's')}
+              />
             )}
           </FormGroup>
         </FormControl>
@@ -101,30 +103,30 @@ export default class Map extends Component {
           center={users.length > 0 ? this.extractUserLocation(users, currentUserId) : undefined}
           defaultZoom={defaultMapSettings.zoom}
           zoom={settings.zoom}
-          onChange={({ center, zoom, bounds, marginBounds }) => actions.changeMapSettings({zoom, bounds})}
+          onChange={({ center, zoom, bounds, marginBounds }) => actions.changeMapSettings({ zoom, bounds })}
         >
           {clusters.map(({ y: lat, x: lng, numPoints, points }) => (
-                numPoints === 1
-                  ?
-                  points[0].addressName && (show === points[0].type || show === "all") &&
-                  <Icon
-                    lat={lat}
-                    lng={lng}
-                    item={points[0]}
-                    icon={this.setIconByType(points[0])}
-                    key={points[0].id}
-                    onHover={hoveredItem => onHover(hoveredItem)}
-                    onHoverOut={() => onHoverOut()}
-                  />
-                  :
-                  <Cluster
-                    key={points[0].id}
-                    lat={lat}
-                    lng={lng}
-                  >
-                    {numPoints}
-                  </Cluster>
-              ))
+            numPoints === 1
+              ?
+              points[0].addressName && (show === points[0].type || show === "all") &&
+              <Icon
+                lat={lat}
+                lng={lng}
+                item={points[0]}
+                icon={this.setIconByType(points[0])}
+                key={points[0].id}
+                onHover={hoveredItem => onHover(hoveredItem)}
+                onHoverOut={() => onHoverOut()}
+              />
+              :
+              <Cluster
+                key={points[0].id}
+                lat={lat}
+                lng={lng}
+              >
+                {numPoints}
+              </Cluster>
+          ))
           }
         </GoogleMapReact>
       </GridMap>
