@@ -17,7 +17,6 @@ import {
   MapButtonContainer
 } from "../../styles/styles";
 import {
-  isEmpty,
   objectArraysAreEqual,
   objectsAreEqual,
   capitalizeFirstLetter
@@ -126,7 +125,10 @@ export default class Map extends Component {
         }
       });
     } else {
-      //show snack bar with 'fill your address first' message
+      this.props.actions.updateSnackbar({
+        open: true,
+        message: "you must provide your address for this to work..."
+      })
     }
   }
 
