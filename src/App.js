@@ -1,16 +1,22 @@
 import React, { Component } from "react";
 import firebase from "firebase";
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { Grid, CssBaseline, Transition, beforeTransitionStyle, transitionStyles } from './styles/styles'
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import {
+  Grid,
+  CssBaseline,
+  Transition,
+  beforeTransitionStyle,
+  transitionStyles
+} from "./styles/styles";
 
 import UserManagement from "./components/UserManagement/UserManagement";
-import AppHeader from './components/AppHeader/AppHeader'
+import AppHeader from "./components/AppHeader/AppHeader";
 import Map from "./components/Map/Map";
-import UserDetails from "./components/UserDetails/UserDetails"
-import AppFooter from "./components/AppFooter/AppFooter"
+import UserDetails from "./components/UserDetails/UserDetails";
+import AppFooter from "./components/AppFooter/AppFooter";
 
-import { objectToArray } from './utils/utils'
+import { objectToArray } from "./utils/utils";
 
 // Initialize Firebase
 const config = {
@@ -26,12 +32,10 @@ firebase.initializeApp(config);
 const theme = createMuiTheme({
   palette: {
     primary: { main: "#28536B" },
-    secondary: { main: '#35393C' },
+    secondary: { main: "#35393C" }
   },
   typography: {
-    fontFamily: [
-      'Roboto'
-    ],
+    fontFamily: ["Roboto"],
     useNextVariants: true
   }
 });
@@ -41,35 +45,36 @@ export default class App extends Component {
     showDetails: false,
     hoveredUser: {},
     show: "all"
-  }
+  };
 
   componentDidMount() {
-    this.props.actions.fetchUsers(firebase)
+    this.props.actions.fetchUsers(firebase);
+    this.props.actions.fetchDogParks(fetch)
   }
 
-  handleShowDetails = (item) => {
+  handleShowDetails = item => {
     this.setState({
       showDetails: true,
       hoveredUser: item
-    })
-  }
+    });
+  };
 
   handleHideDetails = () => {
     this.setState({
       showDetails: false,
       hoveredUser: {}
-    })
-  }
+    });
+  };
 
   handleShowSelect(value) {
     this.setState({
       show: value
-    })
+    });
   }
 
   render() {
-    const { usersData, mapSettings, actions } = this.props
-    const { showDetails, hoveredUser, show } = this.state
+    const { usersData, mapSettings, actions } = this.props;
+    const { showDetails, hoveredUser, show } = this.state;
 
     return (
       <React.Fragment>
@@ -77,51 +82,52 @@ export default class App extends Component {
         <MuiThemeProvider theme={theme}>
           <UserManagement firebase={firebase}>
             {({ isSignedIn, currentUser }) => {
-              return isSignedIn && (
-                <Transition
-                  in={isSignedIn}
-                  timeout={300}
-                  mountOnEnter
-                  unmountOnExit
-                  appear={true}
-                >
-                  {(state) => (
-                    <Grid
-                      style={{
-                        ...beforeTransitionStyle,
-                        ...transitionStyles[state]
-                      }}
-                    >
-                      <AppHeader currentUser={currentUser} />
-                      <Map
-                        actions={actions}
-                        users={objectToArray(usersData.users)}
-                        settings={mapSettings}
-                        currentUserId={currentUser.uid}
-                        onHover={item => this.handleShowDetails(item)}
-                        onHoverOut={() => this.handleHideDetails()}
-                        onSelect={(value) => this.handleShowSelect(value)}
-                        show={show}
-                      />
-                      <UserDetails
-                        actions={actions}
-                        firebase={firebase}
-                        currentUser={currentUser}
-                        isFetching={usersData.isFetching}
-                      />
-                      <AppFooter
-                        showDetails={showDetails}
-                        hoveredUser={hoveredUser}
-                      />
-                    </Grid>
-                  )}
-                </Transition>
+              return (
+                isSignedIn && (
+                  <Transition
+                    in={isSignedIn}
+                    timeout={300}
+                    mountOnEnter
+                    unmountOnExit
+                    appear={true}
+                  >
+                    {state => (
+                      <Grid
+                        style={{
+                          ...beforeTransitionStyle,
+                          ...transitionStyles[state]
+                        }}
+                      >
+                        <AppHeader currentUser={currentUser} />
+                        <Map
+                          actions={actions}
+                          users={objectToArray(usersData.users)}
+                          settings={mapSettings}
+                          currentUserId={currentUser.uid}
+                          onHover={item => this.handleShowDetails(item)}
+                          onHoverOut={() => this.handleHideDetails()}
+                          onSelect={value => this.handleShowSelect(value)}
+                          show={show}
+                        />
+                        <UserDetails
+                          actions={actions}
+                          firebase={firebase}
+                          currentUser={currentUser}
+                          isFetching={usersData.isFetching}
+                        />
+                        <AppFooter
+                          showDetails={showDetails}
+                          hoveredUser={hoveredUser}
+                        />
+                      </Grid>
+                    )}
+                  </Transition>
+                )
               );
             }}
           </UserManagement>
         </MuiThemeProvider>
       </React.Fragment>
-    )
+    );
   }
 }
-

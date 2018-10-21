@@ -3,7 +3,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
-import { Input, InputLabel, MenuItem, FormControl } from '../../styles/styles'
+import { Input, InputLabel, MenuItem, FormControl } from "../../styles/styles";
 
 export default class AddressSelect extends Component {
   state = {
@@ -52,39 +52,41 @@ export default class AddressSelect extends Component {
             getSuggestionItemProps,
             loading
           }) => (
-              <FormControl
-                style={{
-                  width: "100%"
-                }}
+            <FormControl
+              style={{
+                width: "100%"
+              }}
+            >
+              <InputLabel htmlFor="address">Address</InputLabel>
+              <Input
+                {...getInputProps({
+                  placeholder: "Search Address ...",
+                  id: "address"
+                })}
+              />
+              <div
+                className="autocomplete-dropdown-container"
+                style={{ width: "100%" }}
               >
-                <InputLabel htmlFor="address">Address</InputLabel>
-                <Input
-                  {...getInputProps({
-                    placeholder: "Search Address ...",
-                    id: 'address'
-                  })}
-                />
-                <div className="autocomplete-dropdown-container" style={{width: "100%"}}>
-                  {loading && <div>Loading...</div>}
-                  {suggestions.map(suggestion => {
-                 
-                    // inline style for demonstration purpose
-                    const style = suggestion.active
-                      ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                      : { backgroundColor: "#ffffff", cursor: "pointer" };
-                    return (
-                      <MenuItem
-                        {...getSuggestionItemProps(suggestion, {
-                          style
-                        })}
-                      >
-                        <span>{suggestion.description}</span>
-                      </MenuItem>
-                    );
-                  })}
-                </div>
-              </FormControl>
-            )}
+                {loading && <div>Loading...</div>}
+                {suggestions.map(suggestion => {
+                  // inline style for demonstration purpose
+                  const style = suggestion.active
+                    ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                    : { backgroundColor: "#ffffff", cursor: "pointer" };
+                  return (
+                    <MenuItem
+                      {...getSuggestionItemProps(suggestion, {
+                        style
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </MenuItem>
+                  );
+                })}
+              </div>
+            </FormControl>
+          )}
         </PlacesAutocomplete>
       </div>
     );

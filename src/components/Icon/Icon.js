@@ -1,7 +1,7 @@
-import React from 'react'
-import { Tooltip } from '../../styles/styles'
-import { withStyles } from '@material-ui/core/styles';
-import * as userTypes from '../../constants/UserTypes'
+import React from "react";
+import { Tooltip } from "../../styles/styles";
+import { withStyles } from "@material-ui/core/styles";
+import * as userTypes from "../../constants/UserTypes";
 
 const tooltipText = item => {
   switch (item.type) {
@@ -12,39 +12,35 @@ const tooltipText = item => {
           <p>{item.name || item.displayName || ""}</p>
           <p>{(item.address && item.address.addressName) || ""}</p>
         </div>
-      )
+      );
     case userTypes.DOG_OWNER:
-      return <p>nice doggy</p>
+      return <p>nice doggy</p>;
     case userTypes.CAT_OWNER:
-      return <p>nice kitty</p>
+      return <p>nice kitty</p>;
     default:
-      return ''
+      return "";
   }
-}
-
-
-
+};
 
 const iconSize = type => {
   if (window.screen.width > 980) {
     return {
       width: type === userTypes.DOG_OWNER ? "1.5vw" : "2vw",
       height: type === userTypes.DOG_OWNER ? "1.5vw" : "2vw"
-    }
+    };
   } else {
     return {
       width: type === userTypes.DOG_OWNER ? "6vw" : "8vw",
       height: type === userTypes.DOG_OWNER ? "6vw" : "8vw"
-    }
+    };
   }
-}
+};
 
 const CustomTooltip = withStyles({
   tooltip: {
     fontSize: "14px"
   }
-})(Tooltip)
-
+})(Tooltip);
 
 const IconLayer = ({ item, icon, onHover, onHoverOut }) => (
   <CustomTooltip
@@ -62,6 +58,6 @@ const IconLayer = ({ item, icon, onHover, onHoverOut }) => (
       <img src={icon} style={{ width: "100%", height: "100%" }} alt="" />
     </div>
   </CustomTooltip>
-)
+);
 
-export default IconLayer
+export default IconLayer;

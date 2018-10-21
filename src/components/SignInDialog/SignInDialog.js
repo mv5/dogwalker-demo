@@ -1,28 +1,34 @@
-import React from 'react'
-import { 
-    PopupBG, Dialog, DialogContent, DialogContentText, DialogTitle,
-    beforeTransitionStyle, transitionStyles
-} from '../../styles/styles'
+import React from "react";
+import {
+  PopupBG,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  beforeTransitionStyle,
+  transitionStyles
+} from "../../styles/styles";
 
+const SignInDialog = ({ children, transitionState }) => (
+  <React.Fragment>
+    <PopupBG />
+    <Dialog
+      open={true}
+      style={{
+        textAlign: "center",
+        ...beforeTransitionStyle,
+        ...transitionStyles[transitionState]
+      }}
+    >
+      <DialogTitle>Welcome to this demo for dog owners and walkers</DialogTitle>
+      <DialogContent>
+        <DialogContentText color="default">
+          please sign in first
+        </DialogContentText>
+        {children}
+      </DialogContent>
+    </Dialog>
+  </React.Fragment>
+);
 
-const SignInDialog = ({children, transitionState}) => (
-    <React.Fragment>
-        <PopupBG />
-        <Dialog
-            open={true}
-            style={{ 
-                textAlign: 'center',
-                ...beforeTransitionStyle,
-                ...transitionStyles[transitionState]
-            }}
-        >
-            <DialogTitle>Welcome to this demo for dog owners and walkers</DialogTitle>
-            <DialogContent>
-                <DialogContentText color="default">please sign in first</DialogContentText>
-                {children}
-            </DialogContent>
-        </Dialog>
-    </React.Fragment>
-)
-
-export default SignInDialog
+export default SignInDialog;

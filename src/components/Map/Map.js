@@ -1,69 +1,94 @@
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import Icon from "../Icon/Icon";
-import Cluster from "../Cluster/Cluster"
+import Cluster from "../Cluster/Cluster";
 import dogPic from "../../assets/dog.png";
-import catPic from '../../assets/cat.png'
-import housePic from '../../assets/house.png'
+import catPic from "../../assets/cat.png";
+import housePic from "../../assets/house.png";
 import dogWalkerPic from "../../assets/dogwalking.png";
-import { GridMap, FormControlLabel, FormGroup, FormLabel, FormControl, Checkbox } from '../../styles/styles'
-import { isEmpty, objectArraysAreEqual, objectsAreEqual, capitalizeFirstLetter } from '../../utils/utils'
-import supercluster from 'points-cluster';
-import { defaultClusterSettings, defaultMapSettings } from '../../constants/MapSettings'
-import * as userTypes from '../../constants/UserTypes'
+import {
+  GridMap,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  FormControl,
+  Checkbox
+} from "../../styles/styles";
+import {
+  isEmpty,
+  objectArraysAreEqual,
+  objectsAreEqual,
+  capitalizeFirstLetter
+} from "../../utils/utils";
+import supercluster from "points-cluster";
+import {
+  defaultClusterSettings,
+  defaultMapSettings
+} from "../../constants/MapSettings";
+import * as userTypes from "../../constants/UserTypes";
 
 export default class Map extends Component {
   state = {
     clusters: []
-  }
+  };
 
   componentDidUpdate(prevProps, prevState) {
-    if (!objectArraysAreEqual(this.props.users, prevProps.users) ||
-      !objectsAreEqual(prevProps.settings, this.props.settings)) {
-      this.setClusters(this.props.users, this.props.settings)
+    if (
+      !objectArraysAreEqual(this.props.users, prevProps.users) ||
+      !objectsAreEqual(prevProps.settings, this.props.settings)
+    ) {
+      this.setClusters(this.props.users, this.props.settings);
     }
   }
 
   setClusters(users, settings) {
-    const usersWithCoord =
-      users.filter(user => user.address)
-        .map(user => ({
-          ...user,
-          ...user.address
-        }))
+    const usersWithCoord = users.filter(user => user.address).map(user => ({
+      ...user,
+      ...user.address
+    }));
     this.setState({
       clusters: supercluster(usersWithCoord, defaultClusterSettings)(settings)
-    })
+    });
   }
 
   extractUserLocation(users, currentUserId) {
     const userAddress = users.reduce((location, user) => {
       if (currentUserId === user.id) {
-        location = user.address
+        location = user.address;
       }
-      return location
-    }, {})
-    return !isEmpty(userAddress) ? { lat: userAddress.lat, lng: userAddress.lng } : undefined
+      return location;
+    }, {});
+    return !isEmpty(userAddress)
+      ? { lat: userAddress.lat, lng: userAddress.lng }
+      : undefined;
   }
 
   setIconByType(item) {
     switch (item.type) {
       case userTypes.WALKER:
-        return dogWalkerPic
+        return dogWalkerPic;
       case userTypes.SITTER:
-        return housePic
+        return housePic;
       case userTypes.CAT_OWNER:
-        return catPic
+        return catPic;
       case userTypes.DOG_OWNER:
       default:
-        return dogPic
+        return dogPic;
     }
-
   }
 
   render() {
-    const { users, settings, currentUserId, onSelect, show, onHover, onHoverOut, actions } = this.props
-    const { clusters } = this.state
+    const {
+      users,
+      settings,
+      currentUserId,
+      onSelect,
+      show,
+      onHover,
+      onHoverOut,
+      actions
+    } = this.props;
+    const { clusters } = this.state;
 
     return (
       <GridMap>
@@ -73,25 +98,33 @@ export default class Map extends Component {
             position: "absolute",
             zIndex: "9999",
             top: "5%",
-            left: "5%",
+            left: "5%"
           }}
         >
           <FormLabel component="legend">Show</FormLabel>
           <FormGroup>
             <FormControlLabel
               control={
-                <Checkbox checked={show === "all"} onChange={() => onSelect('all')} value="all" />
+                <Checkbox
+                  checked={show === "all"}
+                  onChange={() => onSelect("all")}
+                  value="all"
+                />
               }
               label="All"
             />
-            {Object.keys(userTypes).map(key =>
+            {Object.keys(userTypes).map(key => (
               <FormControlLabel
                 control={
-                  <Checkbox checked={show === userTypes[key]} onChange={() => onSelect(userTypes[key])} value={userTypes[key]} />
+                  <Checkbox
+                    checked={show === userTypes[key]}
+                    onChange={() => onSelect(userTypes[key])}
+                    value={userTypes[key]}
+                  />
                 }
-                label={capitalizeFirstLetter(userTypes[key] + 's')}
+                label={capitalizeFirstLetter(userTypes[key] + "s")}
               />
-            )}
+            ))}
           </FormGroup>
         </FormControl>
 
@@ -100,37 +133,40 @@ export default class Map extends Component {
             key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
           }}
           defaultCenter={defaultMapSettings.center}
-          center={users.length > 0 ? this.extractUserLocation(users, currentUserId) : undefined}
+          center={
+            users.length > 0
+              ? this.extractUserLocation(users, currentUserId)
+              : undefined
+          }
           defaultZoom={defaultMapSettings.zoom}
           zoom={settings.zoom}
-          onChange={({ center, zoom, bounds, marginBounds }) => actions.changeMapSettings({ zoom, bounds })}
-        >
-          {clusters.map(({ y: lat, x: lng, numPoints, points }) => (
-            numPoints === 1
-              ?
-              points[0].addressName && (show === points[0].type || show === "all") &&
-              <Icon
-                lat={lat}
-                lng={lng}
-                item={points[0]}
-                icon={this.setIconByType(points[0])}
-                key={points[0].id}
-                onHover={hoveredItem => onHover(hoveredItem)}
-                onHoverOut={() => onHoverOut()}
-              />
-              :
-              <Cluster
-                key={points[0].id}
-                lat={lat}
-                lng={lng}
-              >
-                {numPoints}
-              </Cluster>
-          ))
+          onChange={({ center, zoom, bounds, marginBounds }) =>
+            actions.changeMapSettings({ zoom, bounds })
           }
+        >
+          {clusters.map(
+            ({ y: lat, x: lng, numPoints, points }) =>
+              numPoints === 1 ? (
+                points[0].addressName &&
+                (show === points[0].type || show === "all") && (
+                  <Icon
+                    lat={lat}
+                    lng={lng}
+                    item={points[0]}
+                    icon={this.setIconByType(points[0])}
+                    key={points[0].id}
+                    onHover={hoveredItem => onHover(hoveredItem)}
+                    onHoverOut={() => onHoverOut()}
+                  />
+                )
+              ) : (
+                <Cluster key={points[0].id} lat={lat} lng={lng}>
+                  {numPoints}
+                </Cluster>
+              )
+          )}
         </GoogleMapReact>
       </GridMap>
-    )
+    );
   }
 }
-
