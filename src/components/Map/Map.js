@@ -29,15 +29,16 @@ import * as userTypes from "../../constants/UserTypes";
 
 export default class Map extends Component {
   state = {
-    clusters: []
+    clusters: [],
+    show: 'all'
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (
       !objectArraysAreEqual(this.props.users, prevProps.users) ||
-      !objectsAreEqual(prevProps.settings, this.props.settings)
+      !objectsAreEqual(prevProps.mapSettings, this.props.mapSettings)
     ) {
-      this.setClusters(this.props.users, this.props.settings);
+      this.setClusters(this.props.users, this.props.mapSettings);
     }
   }
 
@@ -77,18 +78,22 @@ export default class Map extends Component {
     }
   }
 
+  handleShowSelect(value) {
+    this.setState({
+      show: value
+    });
+  }
+
   render() {
     const {
       users,
-      settings,
+      mapSettings,
       currentUserId,
-      onSelect,
-      show,
       onHover,
       onHoverOut,
       actions
     } = this.props;
-    const { clusters } = this.state;
+    const { clusters, show } = this.state;
 
     return (
       <GridMap>
@@ -107,7 +112,7 @@ export default class Map extends Component {
               control={
                 <Checkbox
                   checked={show === "all"}
-                  onChange={() => onSelect("all")}
+                  onChange={() => this.handleShowSelect("all")}
                   value="all"
                 />
               }
@@ -118,7 +123,7 @@ export default class Map extends Component {
                 control={
                   <Checkbox
                     checked={show === userTypes[key]}
-                    onChange={() => onSelect(userTypes[key])}
+                    onChange={() => this.handleShowSelect(userTypes[key])}
                     value={userTypes[key]}
                   />
                 }
@@ -139,7 +144,7 @@ export default class Map extends Component {
               : undefined
           }
           defaultZoom={defaultMapSettings.zoom}
-          zoom={settings.zoom}
+          zoom={mapSettings.zoom}
           onChange={({ center, zoom, bounds, marginBounds }) =>
             actions.changeMapSettings({ zoom, bounds })
           }

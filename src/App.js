@@ -12,11 +12,10 @@ import {
 
 import UserManagement from "./components/UserManagement/UserManagement";
 import AppHeader from "./components/AppHeader/AppHeader";
-import Map from "./components/Map/Map";
-import UserDetails from "./components/UserDetails/UserDetails";
+import Map from "./containers/Map";
+import UserDetails from "./containers/UserDetails";
 import AppFooter from "./components/AppFooter/AppFooter";
 
-import { objectToArray } from "./utils/utils";
 
 // Initialize Firebase
 const config = {
@@ -43,8 +42,7 @@ const theme = createMuiTheme({
 export default class App extends Component {
   state = {
     showDetails: false,
-    hoveredUser: {},
-    show: "all"
+    hoveredUser: {}
   };
 
   componentDidMount() {
@@ -66,15 +64,8 @@ export default class App extends Component {
     });
   };
 
-  handleShowSelect(value) {
-    this.setState({
-      show: value
-    });
-  }
-
   render() {
-    const { usersData, mapSettings, actions } = this.props;
-    const { showDetails, hoveredUser, show } = this.state;
+    const { showDetails, hoveredUser } = this.state;
 
     return (
       <React.Fragment>
@@ -100,20 +91,13 @@ export default class App extends Component {
                       >
                         <AppHeader currentUser={currentUser} />
                         <Map
-                          actions={actions}
-                          users={objectToArray(usersData.users)}
-                          settings={mapSettings}
                           currentUserId={currentUser.uid}
                           onHover={item => this.handleShowDetails(item)}
                           onHoverOut={() => this.handleHideDetails()}
-                          onSelect={value => this.handleShowSelect(value)}
-                          show={show}
                         />
                         <UserDetails
-                          actions={actions}
                           firebase={firebase}
                           currentUser={currentUser}
-                          isFetching={usersData.isFetching}
                         />
                         <AppFooter
                           showDetails={showDetails}
