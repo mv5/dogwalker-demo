@@ -1,0 +1,1 @@
+export const DOG_PARKS_URL = "https://us-central1-dog-walker-map-1539001346416.cloudfunctions.net/scrapedogparks"

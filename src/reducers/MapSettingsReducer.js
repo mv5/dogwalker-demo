@@ -7,7 +7,7 @@ export default (state = defaultMapSettings, action) => {
       return {
         ...state,
         ...action.mapSettings
-      }
+      };
     default:
       return state;
   }
