@@ -91,9 +91,15 @@ export default class UserDetails extends Component {
         </Typography>
         <CustomCardContent>
           <AddressSelect
-            address={user.address}
+            address={user.address.addressName}
             onSelect={address => this.handleAddressChange(address)}
-          />
+          >
+            {!user.address.addressName &&
+              <Typography variant="caption" color="primary">
+              *fill your address to get yourself on the map
+            </Typography>
+            }
+          </AddressSelect>
           <FormWrapper>
             <FormControl
               style={{

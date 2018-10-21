@@ -7,7 +7,7 @@ import { Input, InputLabel, MenuItem, FormControl } from "../../styles/styles";
 
 export default class AddressSelect extends Component {
   state = {
-    addressName: this.props.address ? this.props.address.addressName : "",
+    addressName: this.props.addressName || "",
     searchOptions: {
       type: "address",
       componentRestrictions: {
@@ -52,40 +52,43 @@ export default class AddressSelect extends Component {
             getSuggestionItemProps,
             loading
           }) => (
-            <FormControl
-              style={{
-                width: "100%"
-              }}
-            >
-              <InputLabel htmlFor="address">Address</InputLabel>
-              <Input
-                {...getInputProps({
-                  placeholder: "Search Address ...",
-                  id: "address"
-                })}
-              />
-              <div
-                className="autocomplete-dropdown-container"
-                style={{ width: "100%" }}
+            <React.Fragment>
+              {this.props.children}
+              <FormControl
+                style={{
+                  width: "100%"
+                }}
               >
-                {loading && <div>Loading...</div>}
-                {suggestions.map(suggestion => {
-                  // inline style for demonstration purpose
-                  const style = suggestion.active
-                    ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                    : { backgroundColor: "#ffffff", cursor: "pointer" };
-                  return (
-                    <MenuItem
-                      {...getSuggestionItemProps(suggestion, {
-                        style
-                      })}
-                    >
-                      <span>{suggestion.description}</span>
-                    </MenuItem>
-                  );
-                })}
-              </div>
-            </FormControl>
+                <InputLabel htmlFor="address">Address</InputLabel>
+                <Input
+                  {...getInputProps({
+                    placeholder: "Search Address ...",
+                    id: "address"
+                  })}
+                />
+                <div
+                  className="autocomplete-dropdown-container"
+                  style={{ width: "100%" }}
+                >
+                  {loading && <div>Loading...</div>}
+                  {suggestions.map(suggestion => {
+                    // inline style for demonstration purpose
+                    const style = suggestion.active
+                      ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                      : { backgroundColor: "#ffffff", cursor: "pointer" };
+                    return (
+                      <MenuItem
+                        {...getSuggestionItemProps(suggestion, {
+                          style
+                        })}
+                      >
+                        <span>{suggestion.description}</span>
+                      </MenuItem>
+                    );
+                  })}
+                </div>
+              </FormControl>
+            </React.Fragment>
           )}
         </PlacesAutocomplete>
       </div>
