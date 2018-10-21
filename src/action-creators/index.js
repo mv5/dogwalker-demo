@@ -25,8 +25,8 @@ export const fetchDogParks = (fetch) => {
       const dogParks = body.map(locationString => {
         const coordsArray = locationString.split(":")[1].split(",")
         return{
-          lat: Number(coordsArray[0]),
-          lng: Number(coordsArray[1])
+          lat: Number(coordsArray[1]),
+          lng: Number(coordsArray[0])
         }
       })
       dispatch(recieveDogParks(dogParks))

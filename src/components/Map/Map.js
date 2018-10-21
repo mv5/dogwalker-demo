@@ -12,7 +12,9 @@ import {
   FormGroup,
   FormLabel,
   FormControl,
-  Checkbox
+  Checkbox,
+  Button,
+  MapButtonContainer
 } from "../../styles/styles";
 import {
   isEmpty,
@@ -30,7 +32,8 @@ import * as userTypes from "../../constants/UserTypes";
 export default class Map extends Component {
   state = {
     clusters: [],
-    show: 'all'
+    dogParks: [],
+    show: "all"
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -39,6 +42,12 @@ export default class Map extends Component {
       !objectsAreEqual(prevProps.mapSettings, this.props.mapSettings)
     ) {
       this.setClusters(this.props.users, this.props.mapSettings);
+    }
+
+    if (!objectArraysAreEqual(this.props.dogParks, prevProps.dogParks)) {
+      this.setState({
+        dogParks: this.props.dogParks
+      });
     }
   }
 
@@ -50,18 +59,6 @@ export default class Map extends Component {
     this.setState({
       clusters: supercluster(usersWithCoord, defaultClusterSettings)(settings)
     });
-  }
-
-  extractUserLocation(users, currentUserId) {
-    const userAddress = users.reduce((location, user) => {
-      if (currentUserId === user.id) {
-        location = user.address;
-      }
-      return location;
-    }, {});
-    return !isEmpty(userAddress)
-      ? { lat: userAddress.lat, lng: userAddress.lng }
-      : undefined;
   }
 
   setIconByType(item) {
@@ -84,16 +81,64 @@ export default class Map extends Component {
     });
   }
 
+  onMapLoaded(map, maps) {
+    this.map = map;
+    this.maps = maps;
+  }
+
+  getClosestPark(userLatLng) {
+    let prevDistance;
+    return this.props.dogParks.reduce((closest, park) => {
+      const parkLatLng = new this.maps.LatLng(park.lat, park.lng);
+      let currDistance = this.maps.geometry.spherical.computeDistanceBetween(
+        parkLatLng,
+        userLatLng
+      );
+      if (prevDistance && currDistance > prevDistance) {
+        return closest;
+      } else {
+        prevDistance = currDistance;
+        return parkLatLng;
+      }
+    }, {});
+  }
+
+  calculateRoute() {
+    if (this.props.currentUserAddress) {
+      const { lat, lng } = this.props.currentUserAddress;
+      const userLatLng = new this.maps.LatLng(lat, lng);
+
+      const closestPark = this.getClosestPark(userLatLng);
+
+      const directionsService = new this.maps.DirectionsService();
+      const directionsDisplay = new this.maps.DirectionsRenderer();
+
+      directionsDisplay.setMap(this.map);
+
+      const request = {
+        origin: userLatLng,
+        destination: closestPark,
+        travelMode: "WALKING"
+      };
+      directionsService.route(request, (result, status) => {
+        if (status === "OK") {
+          directionsDisplay.setDirections(result);
+        }
+      });
+    } else {
+      //show snack bar with 'fill your address first' message
+    }
+  }
+
   render() {
     const {
-      users,
       mapSettings,
-      currentUserId,
+      currentUserAddress,
       onHover,
       onHoverOut,
       actions
     } = this.props;
-    const { clusters, show } = this.state;
+    const { clusters, show, dogParks } = this.state;
 
     return (
       <GridMap>
@@ -139,12 +184,13 @@ export default class Map extends Component {
           }}
           defaultCenter={defaultMapSettings.center}
           center={
-            users.length > 0
-              ? this.extractUserLocation(users, currentUserId)
+            currentUserAddress
+              ? { lat: currentUserAddress.lat, lng: currentUserAddress.lng }
               : undefined
           }
           defaultZoom={defaultMapSettings.zoom}
           zoom={mapSettings.zoom}
+          onGoogleApiLoaded={({ map, maps }) => this.onMapLoaded(map, maps)}
           onChange={({ center, zoom, bounds, marginBounds }) =>
             actions.changeMapSettings({ zoom, bounds })
           }
@@ -171,6 +217,32 @@ export default class Map extends Component {
               )
           )}
         </GoogleMapReact>
+
+        <MapButtonContainer>
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            disabled={dogParks.length <= 0}
+            style={{
+              fontSize: "0.7vw"
+            }}
+            onClick={() => this.calculateRoute()}
+          >
+            {dogParks.length <= 0
+              ? "Loading dog parks..."
+              : "Show route to nearest dog park"}
+          </Button>
+          {dogParks.length > 0 && (
+            <span
+              style={{
+                fontSize: "0.5vw"
+              }}
+            >
+              *only available in Tel-Aviv at the moment
+            </span>
+          )}
+        </MapButtonContainer>
       </GridMap>
     );
   }

@@ -91,7 +91,7 @@ export default class App extends Component {
                       >
                         <AppHeader currentUser={currentUser} />
                         <Map
-                          currentUserId={currentUser.uid}
+                          currentUserAddress={currentUser.address}
                           onHover={item => this.handleShowDetails(item)}
                           onHoverOut={() => this.handleHideDetails()}
                         />

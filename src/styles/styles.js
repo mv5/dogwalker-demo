@@ -112,6 +112,16 @@ export const GridUser = styled(Card)`
   grid-area: user-details;
 `;
 
+export const MapButtonContainer = styled.div`
+  position: absolute;
+  bottom: 7%;
+  fontSize: 0.7vw;
+  width: 13%;
+  left: 5%;
+  display: flex;
+  flex-direction: column;
+`
+
 export const CustomCardContent = styled(CardContent)`
   display: flex;
   justify-content: space-around;
