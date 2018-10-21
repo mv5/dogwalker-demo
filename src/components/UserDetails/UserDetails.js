@@ -10,7 +10,6 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
-  Snackbar,
   Typography
 } from "../../styles/styles";
 import { capitalizeFirstLetter, objectsAreEqual } from "../../utils/utils";
@@ -26,18 +25,15 @@ export default class UserDetails extends Component {
         phone: currentUser.phone || "",
         name: currentUser.name || currentUser.displayName || "",
         about: currentUser.about || ""
-      },
-      showSnackbar: false,
-      message: "Signed In successfully!"
+      }
     };
-    this.snackbarTimeOut = null;
-    this.httpTimeout = null;
+    this.httpTimeout = null
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!objectsAreEqual(prevState.user, this.state.user)) {
-      if (this.httpTimeout) {
-        clearTimeout(this.httpTimeout);
+      if(this.httpTimeout){
+        clearTimeout(this.httpTimeout)
       }
       this.httpTimeout = setTimeout(() => {
         this.props.actions.updateUser(
@@ -50,24 +46,12 @@ export default class UserDetails extends Component {
     }
 
     if (prevProps.isFetching && !this.props.isFetching) {
-      // finished fetching
-      if (!this.snackbarTimeOut) {
-        this.setState({
-          showSnackbar: true
-        });
-      }
-    } else if (!this.props.isFetching && this.state.showSnackbar) {
-      if (this.snackbarTimeOut) {
-        clearTimeout(this.snackbarTimeOut);
-      }
-      this.snackbarTimeOut = setTimeout(() => {
-        this.setState({
-          showSnackbar: false,
+      // finished fetching 
+        this.props.actions.updateSnackbar({
+          open: true,
           message: "Details updated successfully!"
-        });
-        this.snackbarTimeOut = null;
-      }, 3000);
-    }
+        })
+    } 
   }
 
   handleInputChange(e) {
@@ -92,7 +76,7 @@ export default class UserDetails extends Component {
   }
 
   render() {
-    const { user, showSnackbar, message } = this.state;
+    const { user } = this.state;
 
     return (
       <GridUser>
@@ -185,15 +169,6 @@ export default class UserDetails extends Component {
               </React.Fragment>
             )}
           </FormWrapper>
-
-          <Snackbar
-            open={showSnackbar}
-            message={<span>{message}</span>}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center"
-            }}
-          />
         </CustomCardContent>
       </GridUser>
     );

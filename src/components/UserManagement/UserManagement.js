@@ -30,6 +30,10 @@ export default class UserManagement extends Component {
       .auth()
       .onAuthStateChanged(user => {
         if (!!user) {
+          this.props.updateSnackbar({
+            open: true,
+            message: "Signed in successfully!"
+          })
           this.syncUserData(user);
         } else {
           this.setState({ isSignedIn: false, loaded: true });
@@ -44,7 +48,7 @@ export default class UserManagement extends Component {
       .on("value", snapshot => {
         const userData = snapshot.val() || {};
         this.setState({
-          isSignedIn: !!user,
+          isSignedIn: true,
           loaded: true,
           currentUser: { ...user, ...userData }
         });

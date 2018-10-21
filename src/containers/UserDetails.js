@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import UserDetails from "../components/UserDetails/UserDetails";
 
 const mapStateToProps = state => ({
-    isFetching: state.usersData.isFetching
+  isFetching: state.usersData.isFetching
 });
 
 const mapDispatchToProps = dispatch => ({

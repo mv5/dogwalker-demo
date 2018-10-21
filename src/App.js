@@ -15,7 +15,7 @@ import AppHeader from "./components/AppHeader/AppHeader";
 import Map from "./containers/Map";
 import UserDetails from "./containers/UserDetails";
 import AppFooter from "./components/AppFooter/AppFooter";
-
+import AppSnackbar from "./containers/AppSnackbar"
 
 // Initialize Firebase
 const config = {
@@ -47,7 +47,7 @@ export default class App extends Component {
 
   componentDidMount() {
     this.props.actions.fetchUsers(firebase);
-    this.props.actions.fetchDogParks(fetch)
+    this.props.actions.fetchDogParks(fetch);
   }
 
   handleShowDetails = item => {
@@ -71,7 +71,7 @@ export default class App extends Component {
       <React.Fragment>
         <CssBaseline />
         <MuiThemeProvider theme={theme}>
-          <UserManagement firebase={firebase}>
+          <UserManagement firebase={firebase} updateSnackbar={this.props.actions.updateSnackbar}>
             {({ isSignedIn, currentUser }) => {
               return (
                 isSignedIn && (
@@ -103,6 +103,7 @@ export default class App extends Component {
                           showDetails={showDetails}
                           hoveredUser={hoveredUser}
                         />
+                       <AppSnackbar />
                       </Grid>
                     )}
                   </Transition>

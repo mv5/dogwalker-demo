@@ -5,7 +5,9 @@ import {
   RECEIVE_USER,
   USERS_FAILURE,
   CHANGE_MAP_SETTINGS,
-  RECEIVE_DOG_PARKS
+  RECEIVE_DOG_PARKS,
+  UPDATE_SNACKBAR,
+  CLOSE_SNACKBAR
 } from "../constants/ActionTypes";
 
 import { DOG_PARKS_URL } from "../constants/FirebaseUrls"
@@ -73,3 +75,11 @@ export const changeMapSettings = mapSettings => ({
   mapSettings
 });
 
+export const updateSnackbar = snackbar => ({
+  type: UPDATE_SNACKBAR,
+  snackbar
+});
+
+export const closeSnackbar = () => ({
+  type: CLOSE_SNACKBAR
+});
