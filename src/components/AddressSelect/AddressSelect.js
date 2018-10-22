@@ -50,7 +50,8 @@ export default class AddressSelect extends Component {
               {this.props.children}
               <FormControl
                 style={{
-                  width: "100%"
+                  width: "100%",
+                  position: "relative"
                 }}
               >
                 <InputLabel htmlFor="address">Address</InputLabel>
@@ -62,13 +63,22 @@ export default class AddressSelect extends Component {
                 />
                 <div
                   className="autocomplete-dropdown-container"
-                  style={{ width: "100%" }}
+                  style={{ 
+                    width: "100%",
+                    position: "absolute",
+                    bottom: 0,
+                    transform: "translateY(100%)",
+                    backgroundColor: "white",
+                    zIndex: "9999",
+                    left: 0,
+                    border: "1px solid lightgray"
+                  }}
                 >
                   {loading && <div>Loading...</div>}
                   {suggestions.map(suggestion => {
                     // inline style for demonstration purpose
                     const style = suggestion.active
-                      ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                      ? { backgroundColor: "lightgray", cursor: "pointer" }
                       : { backgroundColor: "#ffffff", cursor: "pointer" };
                     return (
                       <MenuItem

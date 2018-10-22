@@ -113,6 +113,7 @@ export const GridMap = styled.div`
 
 export const GridUser = styled(Card)`
   grid-area: user-details;
+  overflow: visible !important;
 `;
 
 export const MapButtonContainer = styled.div`

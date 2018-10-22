@@ -136,7 +136,6 @@ export default class Map extends Component {
   render() {
     const {
       mapSettings,
-      currentUserAddress,
       onHover,
       onHoverOut,
       actions
