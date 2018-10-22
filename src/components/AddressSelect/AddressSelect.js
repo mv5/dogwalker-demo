@@ -71,7 +71,8 @@ export default class AddressSelect extends Component {
                     backgroundColor: "white",
                     zIndex: "9999",
                     left: 0,
-                    border: "1px solid lightgray"
+                    border: "1px solid lightgray",
+                    borderTop: "none"
                   }}
                 >
                   {loading && <div>Loading...</div>}

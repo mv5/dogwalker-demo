@@ -67,11 +67,9 @@ export default class App extends Component {
                 isSignedIn && (
                   <Fade in={isSignedIn} timeout={300}>
                     <Grid>
-                      <AppHeader 
-                        isSignedIn={isSignedIn} 
-                        signOut={signOut} 
-                      />
+                      <AppHeader isSignedIn={isSignedIn} signOut={signOut} />
                       <Map
+                        currentUserAddress={currentUser.address}
                         onHover={item => this.handleShowDetails(item)}
                         onHoverOut={() => this.handleHideDetails()}
                       />
