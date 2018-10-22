@@ -1,15 +1,15 @@
 import React from "react";
 import { Header, Typography } from "../../styles/styles";
+import SignOut from "../SignOut/SignOut";
 
-const AppHeader = ({ currentUser }) => (
+const AppHeader = ({ isSignedIn, signOut}) => (
   <Header position="relative" color="primary">
     <Typography color="inherit" variant="h5" gutterBottom={true}>
       WALKIE DOGGY
     </Typography>
-
-    <Typography variant="h6" color="inherit">
-      Welcome {currentUser.name || currentUser.displayName}!
-    </Typography>
+    {isSignedIn &&
+        <SignOut signOut={() => signOut()}/>
+    }
   </Header>
 );
 

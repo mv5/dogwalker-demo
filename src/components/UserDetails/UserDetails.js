@@ -84,15 +84,20 @@ export default class UserDetails extends Component {
           variant="h6"
           color="primary"
           style={{
-            margin: "2% 0 0 2%"
+            margin: "1% 0 0 1%"
           }}
         >
           YOUR DETAILS HERE
         </Typography>
         <CustomCardContent>
           <AddressSelect
-            address={user.address.addressName}
+            addressName={user.address.addressName}
             onSelect={address => this.handleAddressChange(address)}
+            style={{
+              flex: "0 0 20%",
+              marginBottom: "20px",
+              width: window.screen.width > 980 ? "20%" : "100%"
+            }}
           >
             {!user.address.addressName &&
               <Typography variant="caption" color="primary">
@@ -103,7 +108,8 @@ export default class UserDetails extends Component {
           <FormWrapper>
             <FormControl
               style={{
-                marginBottom: "25px"
+                marginBottom: "25px",
+                flex: "0 0 10%"
               }}
             >
               <InputLabel htmlFor="type">Choose Type</InputLabel>
@@ -159,7 +165,11 @@ export default class UserDetails extends Component {
                   />
                 </FormControl>
 
-                <FormControl>
+                <FormControl
+                  style={{
+                    flex: "0 0 25%"
+                  }}
+                >
                   <InputLabel htmlFor="about">About yourself</InputLabel>
                   <Input
                     multiline={true}

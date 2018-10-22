@@ -2,20 +2,15 @@ import React, { Component } from "react";
 import firebase from "firebase";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import {
-  Grid,
-  CssBaseline,
-  Transition,
-  beforeTransitionStyle,
-  transitionStyles
-} from "./styles/styles";
+import { THEME, Grid, CssBaseline, Fade } from "./styles/styles";
 
 import UserManagement from "./components/UserManagement/UserManagement";
 import AppHeader from "./components/AppHeader/AppHeader";
 import Map from "./containers/Map";
 import UserDetails from "./containers/UserDetails";
 import AppFooter from "./components/AppFooter/AppFooter";
-import AppSnackbar from "./containers/AppSnackbar"
+import AppSnackbar from "./containers/AppSnackbar";
+import Loader from "./components/Loader/Loader";
 
 // Initialize Firebase
 const config = {
@@ -28,16 +23,7 @@ const config = {
 };
 firebase.initializeApp(config);
 
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: "#28536B" },
-    secondary: { main: "#35393C" }
-  },
-  typography: {
-    fontFamily: ["Roboto"],
-    useNextVariants: true
-  }
-});
+const theme = createMuiTheme(THEME);
 
 export default class App extends Component {
   state = {
@@ -71,42 +57,36 @@ export default class App extends Component {
       <React.Fragment>
         <CssBaseline />
         <MuiThemeProvider theme={theme}>
-          <UserManagement firebase={firebase} updateSnackbar={this.props.actions.updateSnackbar}>
-            {({ isSignedIn, currentUser }) => {
+          <UserManagement
+            firebase={firebase}
+            updateSnackbar={this.props.actions.updateSnackbar}
+          >
+            {({ isSignedIn, loaded, currentUser, signOut }) => {
+              if(!loaded){
+                return <Loader />;
+              }
+
               return (
                 isSignedIn && (
-                  <Transition
-                    in={isSignedIn}
-                    timeout={300}
-                    mountOnEnter
-                    unmountOnExit
-                    appear={true}
-                  >
-                    {state => (
-                      <Grid
-                        style={{
-                          ...beforeTransitionStyle,
-                          ...transitionStyles[state]
-                        }}
-                      >
-                        <AppHeader currentUser={currentUser} />
-                        <Map
-                          currentUserAddress={currentUser.address}
-                          onHover={item => this.handleShowDetails(item)}
-                          onHoverOut={() => this.handleHideDetails()}
-                        />
-                        <UserDetails
-                          firebase={firebase}
-                          currentUser={currentUser}
-                        />
-                        <AppFooter
-                          showDetails={showDetails}
-                          hoveredUser={hoveredUser}
-                        />
-                       <AppSnackbar />
-                      </Grid>
-                    )}
-                  </Transition>
+                  <Fade in={isSignedIn} timeout={300}>
+                    <Grid>
+                      <AppHeader isSignedIn={isSignedIn} signOut={signOut} />
+                      <Map
+                        currentUserAddress={currentUser.address}
+                        onHover={item => this.handleShowDetails(item)}
+                        onHoverOut={() => this.handleHideDetails()}
+                      />
+                      <UserDetails
+                        firebase={firebase}
+                        currentUser={currentUser}
+                      />
+                      <AppFooter
+                        showDetails={showDetails}
+                        hoveredUser={hoveredUser}
+                      />
+                      <AppSnackbar />
+                    </Grid>
+                  </Fade>
                 )
               );
             }}

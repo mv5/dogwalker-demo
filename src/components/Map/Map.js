@@ -8,13 +8,14 @@ import housePic from "../../assets/house.png";
 import dogWalkerPic from "../../assets/dogwalking.png";
 import {
   GridMap,
-  FormControlLabel,
+  CustomFormControlLabel,
   FormGroup,
   FormLabel,
   FormControl,
-  Checkbox,
+  CustomCheckbox,
   Button,
-  MapButtonContainer
+  MapButtonContainer,
+  FormControlWrapper
 } from "../../styles/styles";
 import {
   objectArraysAreEqual,
@@ -128,7 +129,7 @@ export default class Map extends Component {
       this.props.actions.updateSnackbar({
         open: true,
         message: "you must provide your address for this to work..."
-      })
+      });
     }
   }
 
@@ -144,42 +145,37 @@ export default class Map extends Component {
 
     return (
       <GridMap>
-        <FormControl
-          component="fieldset"
-          style={{
-            position: "absolute",
-            zIndex: "9999",
-            top: "5%",
-            left: "5%"
-          }}
-        >
-          <FormLabel component="legend">Show</FormLabel>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={show === "all"}
-                  onChange={() => this.handleShowSelect("all")}
-                  value="all"
-                />
-              }
-              label="All"
-            />
-            {Object.keys(userTypes).map(key => (
-              <FormControlLabel
+        <FormControlWrapper>
+          <FormControl
+            component="fieldset"
+          >
+            <FormLabel component="legend">Show</FormLabel>
+            <FormGroup >
+              <CustomFormControlLabel
                 control={
-                  <Checkbox
-                    checked={show === userTypes[key]}
-                    onChange={() => this.handleShowSelect(userTypes[key])}
-                    value={userTypes[key]}
+                  <CustomCheckbox
+                    checked={show === "all"}
+                    onChange={() => this.handleShowSelect("all")}
+                    value="all"
                   />
                 }
-                label={capitalizeFirstLetter(userTypes[key] + "s")}
+                label="All"
               />
-            ))}
-          </FormGroup>
-        </FormControl>
-
+              {Object.keys(userTypes).map(key => (
+                <CustomFormControlLabel
+                  control={
+                    <CustomCheckbox
+                      checked={show === userTypes[key]}
+                      onChange={() => this.handleShowSelect(userTypes[key])}
+                      value={userTypes[key]}
+                    />
+                  }
+                  label={capitalizeFirstLetter(userTypes[key] + "s")}
+                />
+              ))}
+            </FormGroup>
+          </FormControl>
+        </FormControlWrapper>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -196,6 +192,7 @@ export default class Map extends Component {
           onChange={({ center, zoom, bounds, marginBounds }) =>
             actions.changeMapSettings({ zoom, bounds })
           }
+          yesIWantToUseGoogleMapApiInternals={true}
         >
           {clusters.map(
             ({ y: lat, x: lng, numPoints, points }) =>
@@ -226,9 +223,6 @@ export default class Map extends Component {
             size="small"
             color="primary"
             disabled={dogParks.length <= 0}
-            style={{
-              fontSize: "0.7vw"
-            }}
             onClick={() => this.calculateRoute()}
           >
             {dogParks.length <= 0

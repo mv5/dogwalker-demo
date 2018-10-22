@@ -4,9 +4,7 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-  beforeTransitionStyle,
-  transitionStyles
+  DialogTitle
 } from "../../styles/styles";
 
 const SignInDialog = ({ children, transitionState }) => (
@@ -15,9 +13,7 @@ const SignInDialog = ({ children, transitionState }) => (
     <Dialog
       open={true}
       style={{
-        textAlign: "center",
-        ...beforeTransitionStyle,
-        ...transitionStyles[transitionState]
+        textAlign: "center"
       }}
     >
       <DialogTitle>Welcome to this demo for dog owners and walkers</DialogTitle>

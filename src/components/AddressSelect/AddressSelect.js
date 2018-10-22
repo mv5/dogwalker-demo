@@ -32,13 +32,7 @@ export default class AddressSelect extends Component {
     const { searchOptions } = this.state;
 
     return (
-      <div
-        style={{
-          flex: "0 0 40%",
-          marginBottom: "20px",
-          width: "40%"
-        }}
-      >
+      <div style={this.props.style}>
         <PlacesAutocomplete
           value={this.state.addressName}
           onChange={this.handleChange}

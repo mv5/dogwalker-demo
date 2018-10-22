@@ -24,10 +24,10 @@ import {
   FormLabel,
   Checkbox,
   FormGroup,
-  Snackbar
+  Snackbar,
+  Popover,
+  Fade
 } from "@material-ui/core";
-
-import Transition from "react-transition-group/Transition";
 
 export {
   Dialog,
@@ -49,38 +49,35 @@ export {
   Checkbox,
   FormGroup,
   Snackbar,
-  Transition
+  Popover,
+  Fade
 };
 
-export const beforeTransitionStyle = {
-  transition: `opacity 1000ms ease-in-out`,
-  opacity: 0
-};
-
-export const transitionStyles = {
-  entering: { opacity: 0 },
-  entered: { opacity: 1 },
-  exiting: { opacity: 1 },
-  exited: { opacity: 0 }
-};
+export const THEME = {
+  palette: {
+    primary: { main: "#28536B" },
+    secondary: { main: "#35393C" }
+  },
+  typography: {
+    fontFamily: ["Roboto"],
+    useNextVariants: true
+  },
+  mapTopMargin: "5%",
+  mobileMapTopMargin: "2%"
+}
 
 export const Grid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1;
   grid-template-rows: auto;
   grid-template-areas:
-    "header header"
-    "user-details map"
-    " . footer";
+    "header"
+    "user-details"
+    "map"
+    "footer";
   grid-gap: 25px 40px;
   padding: 2vh 5vw;
   @media (max-width: 980px) {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "header"
-      "user-details"
-      "map"
-      "footer";
     grid-gap: 15px 20px;
     padding: 2vh 2vw;
   }
@@ -88,14 +85,16 @@ export const Grid = styled.div`
 
 export const Header = styled(AppBar)`
   grid-area: header;
-  border-top-right-radius: 20px;
   padding: 1vh 1vw;
 `;
+
 export const SignOutContainer = styled.div`
   position: absolute;
-  right: 5vw;
-  top: 2vh;
+  right: 2vw;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 9999;
+  transition: opacity 1000ms ease-in-out;
   @media (max-width: 980px) {
     right: 2vw;
   }
@@ -105,6 +104,7 @@ export const GridMap = styled.div`
   grid-area: map;
   min-height: 50vh;
   height: 100%;
+  width: 100%;
   position: relative;
 `;
 
@@ -114,13 +114,19 @@ export const GridUser = styled(Card)`
 
 export const MapButtonContainer = styled.div`
   position: absolute;
-  bottom: 7%;
-  fontSize: 0.7vw;
-  width: 13%;
-  left: 5%;
+  top: ${THEME.mapTopMargin};
+  font-size: 0.7vw;
+  width: 10%;
+  left: 10%;
   display: flex;
   flex-direction: column;
-`
+  @media (max-width: 980px) {
+    top:  ${THEME.mobileMapTopMargin};
+    left: 35%;
+    width: 25%;
+    font-size: 3vw;
+  }
+`;
 
 export const CustomCardContent = styled(CardContent)`
   display: flex;
@@ -138,11 +144,42 @@ export const PopupBG = styled.div`
   height: 100vh;
   background-image: url(${dogsBG});
 `;
+
 export const FormWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  flex: 0 0 40%;
+  flex: 0 0 70%;
+  justify-content: space-between;
+  @media (max-width: 980px){
+    flex-direction: column;
+  }
 `;
+
+export const FormControlWrapper = styled.div`
+  position: absolute;
+  z-index: 9999;
+  top: ${THEME.mapTopMargin};
+  left: 1%;
+  background: rgba(256, 256, 256, 1);
+  padding: 10px 10px 0 10px;
+  border-radius: 5px;
+  @media (max-width: 980px){
+    padding: 5px 5px 0 5px;
+    top:  ${THEME.mobileMapTopMargin};
+  }
+`;
+
+export const CustomFormControlLabel = styled(FormControlLabel)`
+@media (max-width: 980px){
+  margin-right: 5px !important;
+}
+`
+
+export const CustomCheckbox = styled(Checkbox)`
+@media (max-width: 980px){
+  padding-right: 5px !important;
+}
+`
+
 export const Footer = styled.footer`
   grid-area: footer;
 `;

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { Button, Transition, SignOutContainer } from "../../styles/styles";
+import { Fade } from "../../styles/styles";
 import SignInDialog from "../../components/SignInDialog/SignInDialog";
-import Loader from "../../components/Loader/Loader";
 
 export default class UserManagement extends Component {
   state = {
@@ -33,10 +32,14 @@ export default class UserManagement extends Component {
           this.props.updateSnackbar({
             open: true,
             message: "Signed in successfully!"
-          })
+          });
           this.syncUserData(user);
         } else {
-          this.setState({ isSignedIn: false, loaded: true });
+          this.setState({
+            isSignedIn: false,
+            loaded: true,
+            queueTransition: true
+          });
         }
       });
   }
@@ -50,14 +53,15 @@ export default class UserManagement extends Component {
         this.setState({
           isSignedIn: true,
           loaded: true,
-          currentUser: { ...user, ...userData }
+          currentUser: { ...user, ...userData },
+          queueTransition: true
         });
       });
   }
 
-  signOut() {
+  signOut = () => {
     this.props.firebase.auth().signOut();
-  }
+  };
 
   componentWillUnmount() {
     this.unregisterAuthObserver();
@@ -66,42 +70,22 @@ export default class UserManagement extends Component {
   render() {
     const { isSignedIn, loaded } = this.state;
 
-    if (loaded) {
-      return (
-        <React.Fragment>
-          {isSignedIn ? (
-            <SignOutContainer>
-              <Button
-                variant="extendedFab"
-                color="secondary"
-                onClick={() => this.signOut()}
-              >
-                Sign Out
-              </Button>
-            </SignOutContainer>
-          ) : (
-            <Transition
-              in={!isSignedIn}
-              timeout={300}
-              mountOnEnter
-              unmountOnExit
-              appear={true}
-            >
-              {state => (
-                <SignInDialog transitionState={state}>
-                  <StyledFirebaseAuth
-                    uiConfig={this.uiConfig}
-                    firebaseAuth={this.props.firebase.auth()}
-                  />
-                </SignInDialog>
-              )}
-            </Transition>
-          )}
-          {this.props.children(this.state)}
-        </React.Fragment>
-      );
-    } else {
-      return <Loader />;
-    }
+    return (
+      <React.Fragment>
+        {!isSignedIn && loaded && (
+          <Fade in={!isSignedIn} timeout={300}>
+            <React.Fragment>
+              <SignInDialog>
+                <StyledFirebaseAuth
+                  uiConfig={this.uiConfig}
+                  firebaseAuth={this.props.firebase.auth()}
+                />
+              </SignInDialog>
+            </React.Fragment>
+          </Fade>
+        )}
+        {this.props.children({ ...this.state, signOut: this.signOut })}
+      </React.Fragment>
+    );
   }
 }
