@@ -57,12 +57,9 @@ export default class App extends Component {
       <React.Fragment>
         <CssBaseline />
         <MuiThemeProvider theme={theme}>
-          <UserManagement
-            firebase={firebase}
-            updateSnackbar={this.props.actions.updateSnackbar}
-          >
+          <UserManagement firebase={firebase} actions={this.props.actions}>
             {({ isSignedIn, loaded, currentUser, signOut }) => {
-              if(!loaded){
+              if (!loaded) {
                 return <Loader />;
               }
 

@@ -27,13 +27,13 @@ export default class UserDetails extends Component {
         about: currentUser.about || ""
       }
     };
-    this.httpTimeout = null
+    this.httpTimeout = null;
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!objectsAreEqual(prevState.user, this.state.user)) {
-      if(this.httpTimeout){
-        clearTimeout(this.httpTimeout)
+      if (this.httpTimeout) {
+        clearTimeout(this.httpTimeout);
       }
       this.httpTimeout = setTimeout(() => {
         this.props.actions.updateUser(
@@ -46,12 +46,12 @@ export default class UserDetails extends Component {
     }
 
     if (prevProps.isFetching && !this.props.isFetching) {
-      // finished fetching 
-        this.props.actions.updateSnackbar({
-          open: true,
-          message: "Details updated successfully!"
-        })
-    } 
+      // finished fetching
+      this.props.actions.updateSnackbar({
+        open: true,
+        message: "Details updated successfully!"
+      });
+    }
   }
 
   handleInputChange(e) {
@@ -73,6 +73,10 @@ export default class UserDetails extends Component {
         address
       }
     }));
+    this.props.actions.changeMapSettings({
+      zoom: 15,
+      center: { lat: address.lat, lng: address.lng }
+    });
   }
 
   render() {
@@ -99,11 +103,11 @@ export default class UserDetails extends Component {
               width: window.screen.width > 980 ? "20%" : "100%"
             }}
           >
-            {!user.address.addressName &&
+            {!user.address.addressName && (
               <Typography variant="caption" color="primary">
-              *fill your address to get yourself on the map
-            </Typography>
-            }
+                *fill your address to get yourself on the map
+              </Typography>
+            )}
           </AddressSelect>
           <FormWrapper>
             <FormControl

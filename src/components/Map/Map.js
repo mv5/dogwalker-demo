@@ -146,11 +146,9 @@ export default class Map extends Component {
     return (
       <GridMap>
         <FormControlWrapper>
-          <FormControl
-            component="fieldset"
-          >
+          <FormControl component="fieldset">
             <FormLabel component="legend">Show</FormLabel>
-            <FormGroup >
+            <FormGroup>
               <CustomFormControlLabel
                 control={
                   <CustomCheckbox
@@ -181,11 +179,7 @@ export default class Map extends Component {
             key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
           }}
           defaultCenter={defaultMapSettings.center}
-          center={
-            currentUserAddress
-              ? { lat: currentUserAddress.lat, lng: currentUserAddress.lng }
-              : undefined
-          }
+          center={mapSettings.center}
           defaultZoom={defaultMapSettings.zoom}
           zoom={mapSettings.zoom}
           onGoogleApiLoaded={({ map, maps }) => this.onMapLoaded(map, maps)}

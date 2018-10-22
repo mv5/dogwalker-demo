@@ -29,7 +29,7 @@ export default class UserManagement extends Component {
       .auth()
       .onAuthStateChanged(user => {
         if (!!user) {
-          this.props.updateSnackbar({
+          this.props.actions.updateSnackbar({
             open: true,
             message: "Signed in successfully!"
           });
@@ -37,8 +37,7 @@ export default class UserManagement extends Component {
         } else {
           this.setState({
             isSignedIn: false,
-            loaded: true,
-            queueTransition: true
+            loaded: true
           });
         }
       });
@@ -53,8 +52,7 @@ export default class UserManagement extends Component {
         this.setState({
           isSignedIn: true,
           loaded: true,
-          currentUser: { ...user, ...userData },
-          queueTransition: true
+          currentUser: { ...user, ...userData }
         });
       });
   }
@@ -72,18 +70,19 @@ export default class UserManagement extends Component {
 
     return (
       <React.Fragment>
-        {!isSignedIn && loaded && (
-          <Fade in={!isSignedIn} timeout={300}>
-            <React.Fragment>
-              <SignInDialog>
-                <StyledFirebaseAuth
-                  uiConfig={this.uiConfig}
-                  firebaseAuth={this.props.firebase.auth()}
-                />
-              </SignInDialog>
-            </React.Fragment>
-          </Fade>
-        )}
+        {!isSignedIn &&
+          loaded && (
+            <Fade in={!isSignedIn} timeout={300}>
+              <React.Fragment>
+                <SignInDialog>
+                  <StyledFirebaseAuth
+                    uiConfig={this.uiConfig}
+                    firebaseAuth={this.props.firebase.auth()}
+                  />
+                </SignInDialog>
+              </React.Fragment>
+            </Fade>
+          )}
         {this.props.children({ ...this.state, signOut: this.signOut })}
       </React.Fragment>
     );
