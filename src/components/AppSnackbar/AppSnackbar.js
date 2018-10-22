@@ -3,28 +3,19 @@ import { Snackbar } from "../../styles/styles";
 
 export default class AppSnackbar extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       open: props.open || false,
       message: props.message || ""
     };
-    this.timeout = null;
   }
 
   componentDidUpdate() {
-    if (
-      this.state.open !== this.props.open ||
-      this.state.message !== this.props.message
-    ) {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
-      this.timeout = setTimeout(() => {
-        this.setState({
-          open: this.props.open,
-          message: this.props.message
-        });
-      }, 2000);
+    if ( this.state.open !== this.props.open ) {
+      this.setState({
+        open: this.props.open,
+        message: this.props.message
+      });
     }
   }
 
@@ -44,6 +35,7 @@ export default class AppSnackbar extends Component {
           vertical: "bottom",
           horizontal: "center"
         }}
+        key={message}
       />
     );
   }

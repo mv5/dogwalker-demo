@@ -106,6 +106,9 @@ export const GridMap = styled.div`
   height: 100%;
   width: 100%;
   position: relative;
+  @media (max-width: 980px){
+    min-height: 70vh;
+  }
 `;
 
 export const GridUser = styled(Card)`
@@ -143,6 +146,11 @@ export const PopupBG = styled.div`
   width: 100vw;
   height: 100vh;
   background-image: url(${dogsBG});
+  @media (max-width: 980px){
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right center;
+  }
 `;
 
 export const FormWrapper = styled.div`
