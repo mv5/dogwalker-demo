@@ -12,7 +12,7 @@ import {
   FormControl,
   Typography
 } from "../../styles/styles";
-import { capitalizeFirstLetter, objectsAreEqual } from "../../utils/utils";
+import { capitalizeFirstLetter, objectsAreEqual, isEmpty } from "../../utils/utils";
 
 export default class UserDetails extends Component {
   constructor(props) {
@@ -28,6 +28,12 @@ export default class UserDetails extends Component {
       }
     };
     this.httpTimeout = null;
+  }
+
+  componentDidMount(){
+    if(isEmpty(this.state.user.address)){
+      this.getAddressFromBrowser()
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -51,6 +57,26 @@ export default class UserDetails extends Component {
         open: true,
         message: "Details updated successfully!"
       });
+    }
+  }
+
+  getAddressFromBrowser(){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=
+        ${latitude},${longitude}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`)
+        .then(data => data.json())
+        .then(json => {
+          const addressName = json.results[0].formatted_address
+          const address = {
+            addressName,
+            lat: latitude,
+            lng: longitude
+          }
+          this.handleAddressChange(address)
+        })
+      })
     }
   }
 

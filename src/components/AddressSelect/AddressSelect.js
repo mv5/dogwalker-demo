@@ -16,6 +16,12 @@ export default class AddressSelect extends Component {
     }
   };
 
+  componentDidUpdate(prevProps){
+    if(prevProps.addressName !== this.props.addressName){
+      this.handleChange(this.props.addressName)
+    }
+  }
+
   handleChange = addressName => {
     this.setState({ addressName });
   };

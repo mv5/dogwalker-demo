@@ -26,8 +26,7 @@ import {
 import supercluster from "points-cluster";
 import {
   defaultClusterSettings,
-  defaultMapSettings,
-  defaultParkClusterSettings
+  defaultMapSettings
 } from "../../constants/MapSettings";
 import * as userTypes from "../../constants/UserTypes";
 
