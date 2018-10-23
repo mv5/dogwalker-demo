@@ -29,7 +29,7 @@ export default class AppSnackbar extends Component {
       <Snackbar
         open={open}
         message={<span>{message}</span>}
-        autoHideDuration={2000}
+        autoHideDuration={3000}
         onClose={() => this.closeBar()}
         anchorOrigin={{
           vertical: "bottom",

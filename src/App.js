@@ -64,8 +64,7 @@ export default class App extends Component {
               }
 
               return (
-                isSignedIn && (
-                  <Fade in={isSignedIn} timeout={300}>
+                  <Fade in={isSignedIn} timeout={500}>
                     <Grid>
                       <AppHeader isSignedIn={isSignedIn} signOut={signOut} />
                       <Map
@@ -84,7 +83,6 @@ export default class App extends Component {
                       <AppSnackbar />
                     </Grid>
                   </Fade>
-                )
               );
             }}
           </UserManagement>

@@ -21,3 +21,9 @@ export const defaultClusterSettings = {
   maxZoom: 15,
   radius: 60
 };
+
+export const defaultParkClusterSettings = {
+  minZoom: 3,
+  maxZoom: 25,
+  radius: 15
+};

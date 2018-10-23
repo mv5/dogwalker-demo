@@ -12,10 +12,7 @@ export default (state = defaultState, action) => {
         ...action.snackbar
       };
     case CLOSE_SNACKBAR:
-      return {
-          message: "",
-          open: false
-      }
+      return defaultState
     default:
       return state;
   }

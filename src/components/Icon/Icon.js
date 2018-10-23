@@ -18,7 +18,7 @@ const tooltipText = item => {
     case userTypes.CAT_OWNER:
       return <p>nice kitty</p>;
     default:
-      return "";
+      return "dog park";
   }
 };
 
@@ -52,9 +52,9 @@ const IconLayer = ({ item, icon, onHover, onHoverOut }) => (
     <div
       style={iconSize(item.type)}
       key={item}
-      onMouseEnter={() => onHover(item)}
-      onMouseLeave={() => onHoverOut()}
-      onTouchStart={() => onHover(item)}
+      onMouseEnter={() => item.type && onHover(item) }
+      onMouseLeave={() => item.type && onHoverOut()}
+      onTouchStart={() => item.type && onHover(item)}
     >
       <img src={icon} style={{ width: "100%", height: "100%" }} alt="" />
     </div>

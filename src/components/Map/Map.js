@@ -6,6 +6,7 @@ import dogPic from "../../assets/dog.png";
 import catPic from "../../assets/cat.png";
 import housePic from "../../assets/house.png";
 import dogWalkerPic from "../../assets/dogwalking.png";
+import dogPark from "../../assets/dogpark.png"
 import {
   GridMap,
   CustomFormControlLabel,
@@ -25,15 +26,19 @@ import {
 import supercluster from "points-cluster";
 import {
   defaultClusterSettings,
-  defaultMapSettings
+  defaultMapSettings,
+  defaultParkClusterSettings
 } from "../../constants/MapSettings";
 import * as userTypes from "../../constants/UserTypes";
 
 export default class Map extends Component {
   state = {
-    clusters: [],
+    clusters: {
+      users: [],
+      parks: []
+    },
     dogParks: [],
-    show: "all"
+    show: ["all"]
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -44,10 +49,15 @@ export default class Map extends Component {
       this.setClusters(this.props.users, this.props.mapSettings);
     }
 
-    if (!objectArraysAreEqual(this.props.dogParks, prevProps.dogParks)) {
-      this.setState({
-        dogParks: this.props.dogParks
-      });
+    if (!objectArraysAreEqual(this.props.dogParks, prevProps.dogParks) ||
+    !objectsAreEqual(prevProps.mapSettings, this.props.mapSettings)) {
+      this.setState(prevState => ({
+        dogParks: this.props.dogParks,
+        clusters: {
+          ...prevState.clusters,
+          parks: supercluster(this.props.dogParks, defaultClusterSettings)(this.props.mapSettings)
+        }
+      }));
     }
   }
 
@@ -56,9 +66,12 @@ export default class Map extends Component {
       ...user,
       ...user.address
     }));
-    this.setState({
-      clusters: supercluster(usersWithCoord, defaultClusterSettings)(settings)
-    });
+    this.setState(prevState => ({
+      clusters: {
+        ...prevState.clusters,
+        users: supercluster(usersWithCoord, defaultClusterSettings)(settings)
+      } 
+    }));
   }
 
   setIconByType(item) {
@@ -75,10 +88,19 @@ export default class Map extends Component {
     }
   }
 
-  handleShowSelect(value) {
-    this.setState({
-      show: value
-    });
+  handleShowSelect(value, checked) {
+    if(value !== "parks"){
+      this.setState(prevState => {
+        const withoutParks = prevState.show.filter(shown => shown !== 'parks')
+        return {
+          show: checked ? withoutParks.concat(value) : withoutParks.filter(shown => shown !== value)
+        }
+      });
+    } else {
+      this.setState({
+        show: ["parks"]
+      })
+    }
   }
 
   onMapLoaded(map, maps) {
@@ -151,25 +173,36 @@ export default class Map extends Component {
               <CustomFormControlLabel
                 control={
                   <CustomCheckbox
-                    checked={show === "all"}
-                    onChange={() => this.handleShowSelect("all")}
+                    checked={show.includes("all")}
+                    onChange={(e, checked) => this.handleShowSelect("all", checked)}
                     value="all"
                   />
                 }
-                label="All"
+                label="All Users"
               />
               {Object.keys(userTypes).map(key => (
                 <CustomFormControlLabel
                   control={
                     <CustomCheckbox
-                      checked={show === userTypes[key]}
-                      onChange={() => this.handleShowSelect(userTypes[key])}
+                      checked={show.includes(userTypes[key])}
+                      onChange={(e, checked) => this.handleShowSelect(userTypes[key], checked)}
                       value={userTypes[key]}
                     />
                   }
                   label={capitalizeFirstLetter(userTypes[key] + "s")}
                 />
               ))}
+                <CustomFormControlLabel
+                control={
+                  <CustomCheckbox
+                    checked={show.includes("parks")}
+                    onChange={(e, checked) => this.handleShowSelect("parks", checked)}
+                    value="parks"
+                    disabled={dogParks.length <= 0}
+                  />
+                }
+                label="Parks"
+              />
             </FormGroup>
           </FormControl>
         </FormControlWrapper>
@@ -187,11 +220,11 @@ export default class Map extends Component {
           }
           yesIWantToUseGoogleMapApiInternals={true}
         >
-          {clusters.map(
+          {clusters.users.map(
             ({ y: lat, x: lng, numPoints, points }) =>
-              numPoints === 1 ? (
+            (show.includes(points[0].type) || show.includes("all")) && 
+            (numPoints === 1 ? (
                 points[0].addressName &&
-                (show === points[0].type || show === "all") && (
                   <Icon
                     lat={lat}
                     lng={lng}
@@ -201,12 +234,27 @@ export default class Map extends Component {
                     onHover={hoveredItem => onHover(hoveredItem)}
                     onHoverOut={() => onHoverOut()}
                   />
-                )
               ) : (
                 <Cluster key={points[0].id} lat={lat} lng={lng}>
                   {numPoints}
                 </Cluster>
-              )
+              ))
+          )}
+           {clusters.parks.map(
+            ({ y: lat, x: lng, numPoints, points }) =>
+            show.includes("parks") && (numPoints === 1 ? (
+                  <Icon
+                    lat={lat}
+                    lng={lng}
+                    item={points[0]}
+                    icon={dogPark}
+                    key={points[0].id}
+                  />
+              ) : (
+                <Cluster key={points[0].id} lat={lat} lng={lng}>
+                  {numPoints}
+                </Cluster>
+              ))
           )}
         </GoogleMapReact>
 
