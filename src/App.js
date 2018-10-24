@@ -64,6 +64,7 @@ export default class App extends Component {
               }
 
               return (
+                isSignedIn &&
                   <Fade in={isSignedIn} timeout={500}>
                     <Grid>
                       <AppHeader isSignedIn={isSignedIn} signOut={signOut} />
