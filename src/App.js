@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import firebase from "firebase";
+import React, { Component } from 'react'
+import firebase from 'firebase'
 
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { THEME, Grid, CssBaseline, Fade } from "./styles/styles";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { THEME, Grid, CssBaseline, Fade } from './styles/styles'
 
-import UserManagement from "./components/UserManagement/UserManagement";
-import AppHeader from "./components/AppHeader/AppHeader";
-import Map from "./containers/Map";
-import UserDetails from "./containers/UserDetails";
-import AppFooter from "./components/AppFooter/AppFooter";
-import AppSnackbar from "./containers/AppSnackbar";
-import Loader from "./components/Loader/Loader";
+import UserManagement from './components/UserManagement/UserManagement'
+import AppHeader from './components/AppHeader/AppHeader'
+import Map from './containers/Map'
+import UserDetails from './containers/UserDetails'
+import AppFooter from './components/AppFooter/AppFooter'
+import AppSnackbar from './containers/AppSnackbar'
+import Loader from './components/Loader/Loader'
 
 // Initialize Firebase
 const config = {
@@ -20,38 +20,38 @@ const config = {
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID
-};
-firebase.initializeApp(config);
+}
+firebase.initializeApp(config)
 
-const theme = createMuiTheme(THEME);
+const theme = createMuiTheme(THEME)
 
 export default class App extends Component {
   state = {
     showDetails: false,
     hoveredUser: {}
-  };
+  }
 
   componentDidMount() {
-    this.props.actions.fetchUsers(firebase);
-    this.props.actions.fetchDogParks(fetch);
+    this.props.actions.fetchUsers(firebase)
+    this.props.actions.fetchDogParks(fetch)
   }
 
   handleShowDetails = item => {
     this.setState({
       showDetails: true,
       hoveredUser: item
-    });
-  };
+    })
+  }
 
   handleHideDetails = () => {
     this.setState({
       showDetails: false,
       hoveredUser: {}
-    });
-  };
+    })
+  }
 
   render() {
-    const { showDetails, hoveredUser } = this.state;
+    const { showDetails, hoveredUser } = this.state
 
     return (
       <React.Fragment>
@@ -60,22 +60,22 @@ export default class App extends Component {
           <UserManagement firebase={firebase} actions={this.props.actions}>
             {({ isSignedIn, loaded, currentUser, signOut }) => {
               if (!loaded) {
-                return <Loader />;
+                return <Loader />
               }
 
               return (
-                isSignedIn &&
+                isSignedIn && (
                   <Fade in={isSignedIn} timeout={500}>
                     <Grid>
                       <AppHeader isSignedIn={isSignedIn} signOut={signOut} />
+                      <UserDetails
+                        firebase={firebase}
+                        currentUser={currentUser}
+                      />
                       <Map
                         currentUserAddress={currentUser.address}
                         onHover={item => this.handleShowDetails(item)}
                         onHoverOut={() => this.handleHideDetails()}
-                      />
-                      <UserDetails
-                        firebase={firebase}
-                        currentUser={currentUser}
                       />
                       <AppFooter
                         showDetails={showDetails}
@@ -84,11 +84,12 @@ export default class App extends Component {
                       <AppSnackbar />
                     </Grid>
                   </Fade>
-              );
+                )
+              )
             }}
           </UserManagement>
         </MuiThemeProvider>
       </React.Fragment>
-    );
+    )
   }
 }

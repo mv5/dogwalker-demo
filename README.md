@@ -3,7 +3,7 @@
 A dogwalker app where users can 
 register, 
 submit their details, 
-and see other users details
+and see other users details on an interactive google map
 
 check out the [Demo](https://dog-walker-map-1539001346416.firebaseapp.com/)
 
